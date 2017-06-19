@@ -15,16 +15,15 @@ MainMap::MainMap(QWidget *parent) :
     if(!dir.exists() && !dir.mkdir(confDir)){
         //error
     }
-
-
     upointer = new UPointer(confDir);
-    //    upointer->setConfDir();
     ui->graphicsView->setScene(upointer->getScene());
     upointer->reWrite(ui->graphicsView->width(),ui->graphicsView->height());
     admin = new AdminForm();
     admin->setPointer(upointer);
+    // отображение положения курсора на сцене в Дисплее
     connect(upointer->getScene(), SIGNAL(signalCursor(QPointF)), this,SLOT(slotDisplay(QPointF)));
     ui->graphicsView->setMouseTracking(true);
+
 }
 void MainMap::resizeEvent(QResizeEvent* event) {
     Q_UNUSED(event);
@@ -57,5 +56,6 @@ void MainMap::on_btnRG_clicked()
                            ));
     admin->show();
 }
+
 
 

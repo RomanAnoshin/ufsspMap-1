@@ -5,13 +5,13 @@ AirObject::AirObject(): QGraphicsItem()
 {
     dx=2;
     dy=2;
-
+    count=0;
+    count2=0;
+    moveNumber=0;
 }
 
 AirObject::AirObject(float dx, float dy, qreal angle): AirObject()
 {   this->angle=angle;
-//    this->dx=1;
-//    this->dy=1;
     this->dx=dx;
     this->dy=dy;
     posX = -10;
@@ -29,15 +29,32 @@ AirObject::AirObject(float dx, float dy,qreal angle,int x, int y, int w, int h) 
     height = h;
 }
 
+void AirObject::setMoveNumber(int i)
+{
+    this->moveNumber=i;
+}
+
 QRectF AirObject::boundingRect() const
 {
     return QRectF(posX,posY,width,height);   // Ограничиваем область, в которой лежит треугольник
 }
 
 void AirObject::advance(int phase)
+{   if(phase){
+        if(count==moveNumber){
+            signalFinish(path.count, path);
+            delete this;
+            return;
+        }
+        if(((++count)%5)==0){
+            moveBy(dx*5,dy*5);
+            //-------------------------------------------------
+        }
+    }}
+
+void AirObject::setFlightRote(flightRoute path)
 {
-    if(phase)
-        moveBy(dx*10,dy*10);
+    this->path=path;
 }
 
 void AirObject::setRectItem(int x, int y, int w, int h)
@@ -57,4 +74,9 @@ void AirObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
     painter->drawLine(0,0,0,-10);
     Q_UNUSED(option);
     Q_UNUSED(widget);
+}
+
+void AirObject::setCount(int i)
+{
+    this->count2=i;
 }

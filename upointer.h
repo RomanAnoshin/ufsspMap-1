@@ -1,29 +1,33 @@
+
 #ifndef UPOINTER_H
 #define UPOINTER_H
 
 #include <iostream>
-
 #include <QObject>
 #include <QGraphicsScene>
-
 #include <QGraphicsView>
-#include <QGraphicsScene>
 #include <QGraphicsItem>
-#include <QTimer>
-#include <math.h>
-
 #include <QGraphicsRectItem>
 #include <QGraphicsEllipseItem>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsLineItem>
+#include <QTimer>
+#include <QFile>
+#include <QDebug>
+#include <QApplication>
+
+#include <math.h>
+
 #include "graphicsscene.h"
 #include "scenetypes.h"
 #include "airobject.h"
+#include "moveitem.h"
 
 class UPointer : public QObject
 {
     Q_OBJECT
 public:
+    void reWritePath(flightRoute path);
     explicit UPointer(QString mainConfDir, QObject *parent = 0);
     void reWrite(int width, int height);
     GraphicsScene * getScene();
@@ -35,16 +39,26 @@ public:
     void setPosition(float x0,float y0,float x1,float y1);
     fPoint getzPosition();
     fPoint getlastPosition();
-    fPoint calcDelta(iPoint begin,iPoint end, float speed);
+    void addConfAir(flightRoute path);
+    iConfig getConfig();
+    void drawAir();
+    void save();
+ //   void reLoad();
 
-signals:
+signals:   
+public slots:
+ void flight2(int num, flightRoute path);
 private:
+    fPoint calcDelta(iPoint begin,iPoint end, float speed);
+    void drawPath(flightRoute path);
+    flightRoute p;
+    void flight(flightRoute path);
     qreal left;
     qreal top;
-    QPixmap     pic;
+    QPixmap pic;
     GraphicsScene *scene;
     void reLoad();
-    void save();
+
     iConfig conf;
     QList <int> groupList;
     void loadGroup(int groupNumber);
@@ -53,8 +67,9 @@ private:
     int imgWidth;
     int imgHeight;
     iPoint mainPosition;
-    qreal calcAngle(iPoint begin, iPoint end);
+    float calcAngle(iPoint begin, iPoint end);
     QTimer* animationTimer;
+    int moveNumber(iPoint begin, iPoint end,float speed);
     fPoint toCoord(iPoint position);
     iPoint fromCoord(fPoint position);
     QString confdir;

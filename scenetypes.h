@@ -37,6 +37,9 @@ typedef struct iGroup_str {
 typedef struct flightRoute_str {
     QList <iPoint> airPoint;
     qreal targetNumber;
+    int OGP;
+    int typeAirObj;
+    int count;
 }flightRoute;
 
 typedef struct iConfig_str {

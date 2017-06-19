@@ -27,7 +27,6 @@ public slots:
 
 private slots:
     void on_btnRG_clicked();
-
 private:
     Ui::MainMap *ui;
     UPointer *upointer;

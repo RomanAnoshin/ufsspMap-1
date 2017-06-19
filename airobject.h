@@ -1,4 +1,4 @@
-#ifndef AIROBJECT_H
+﻿#ifndef AIROBJECT_H
 #define AIROBJECT_H
 
 #include <QObject>
@@ -16,18 +16,28 @@ public:
     AirObject();
     AirObject(float dx, float dy, qreal angle);
     AirObject(float dx, float dy, qreal angle, int x, int y, int w, int h );
+    void setMoveNumber(int i);
+    void advance(int phase);
+    void setFlightRote(flightRoute path);
+    void setRectItem(int x, int y, int w, int h);
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    void setCount(int i);
+
+signals:
+    void signalFinish(int count, flightRoute path);
+
 protected:
     QRectF boundingRect() const;
-public:
-    void advance(int phase);
-    void setRectItem(int x, int y, int w, int h);
 
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 private:
+    int moveNumber;
     int posX, posY, width, height;
     float dx;
     float dy;
     qreal angle;
+    int count;
+    int count2;
+    flightRoute path;
 };
 
 #endif // AIROBJECT_H

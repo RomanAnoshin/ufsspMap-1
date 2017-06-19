@@ -9,6 +9,6 @@ int main(int argc, char *argv[])
     QApplication::setStyle("windows");
     MainMap w;
     w.showMaximized();
-
     return a.exec();
+
 }

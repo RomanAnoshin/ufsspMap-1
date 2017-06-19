@@ -1,8 +1,8 @@
 #include "upointer.h"
-#include <QFile>
-#include <QDebug>
-#include <QApplication>
-#include <QGraphicsPixmapItem>
+#include "iostream"
+static float const PI=3.14159265358979323846;
+
+
 
 UPointer::UPointer(QString mainConfDir, QObject *parent) : QObject(parent), isEditLine(false), isEditImg(false)
 {
@@ -19,27 +19,22 @@ UPointer::UPointer(QString mainConfDir, QObject *parent) : QObject(parent), isEd
     // создание таймера для анимации воздушных целей
     animationTimer=new QTimer(this);
     connect(animationTimer, SIGNAL(timeout()), scene, SLOT(advance()));
-    animationTimer->start(5000);
-
-
-
-    iPoint one=conf.airObject.at(0).airPoint.at(0);
-    iPoint two=conf.airObject.at(0).airPoint.at(1);
-
-    fPoint f=calcDelta(one, two,1000);
-    AirObject* obj=new AirObject(f.x, f.y,calcAngle(one,two));
-    obj->setPos(one.x,two.y);
-
-//    QGraphicsEllipseItem* el=new QGraphicsEllipseItem(conf.airPoint.at(0).x-2,conf.airPoint.at(0).y-2,4,4);
-//    el->setBrush(Qt::red);
-//    QGraphicsEllipseItem* el2=new QGraphicsEllipseItem(conf.airPoint.at(1).x, conf.airPoint.at(1).y, 4,4);
-//    el2->setBrush(Qt::red);
-//    scene->addItem(el2);
-//    scene->addItem(el);
-    scene->addItem(obj);
+    animationTimer->start(1000);
+    //------------------------------------------
+    //    MoveItem* item=new MoveItem();
+    //    item->setPos(947,563);
+    //    scene->addItem(item);
+    //    item->setZValue(1);
+    //------------------------------------------
 }
 GraphicsScene * UPointer::getScene() {
     return scene;
+}
+void UPointer::reWritePath(flightRoute path)
+{   int size=conf.airObject.size();
+    conf.airObject.append(path);
+    conf.airObject.swap(path.targetNumber-1,size);
+    conf.airObject.removeLast();
 }
 QString UPointer::getConfDir(){
     return confdir;
@@ -96,23 +91,73 @@ void UPointer::addImg(iDataImages image){
     itm->setOffset(image.position.x,image.position.y);
     scene->addItem(itm);
 }
-
-qreal UPointer:: calcAngle(iPoint begin, iPoint end)
-{
-    qreal angle=atan((end.x-begin.x)/(end.y-begin.y));
-    angle=angle*(180/3.14159)+90;
-    return angle;
+float UPointer:: calcAngle(iPoint begin, iPoint end)
+{    float hyp=::sqrt(pow(end.x-begin.x,2)+pow(end.y-begin.y,2));
+     float angle=::acos((end.x-begin.x)/hyp);
+      while(angle<0)
+          angle+=2*PI;
+       while(angle>2*PI)
+           angle-=2*PI;
+        angle=angle*(180/PI)+90;
+         return angle;
+}
+int UPointer::moveNumber(iPoint begin, iPoint end, float speed)
+{float a;
+    a=speed/(60.0*60.0); //км/ч -> км/с
+    float hyp=::sqrt(pow(end.x-begin.x,2)+pow(end.y-begin.y,2));// находим общее расстояние полета (гипотенузу)
+    float time=hyp/a;
+    return (int)time/2;
 }
 
 fPoint UPointer::calcDelta(iPoint begin, iPoint end,float speed)
 { fPoint f;
     float a;
-    a=speed/(60.0*60.0); //1000 км/ч -> км/с
-    float hyp=sqrt(pow(end.x-begin.x,2)+pow(end.y-begin.y,2));// находим общее ратояние полета (гипотенузу)
+    a=speed/(60.0*60.0); //км/ч -> км/с
+    float hyp=::sqrt(pow(end.x-begin.x,2)+pow(end.y-begin.y,2));// находим общее расстояние полета (гипотенузу)
     float time=hyp/a;
     f.x=((end.x-begin.x))/time;
     f.y=((end.y-begin.y))/time;
     return f;
+}
+
+void UPointer::drawPath(flightRoute path)
+{
+    for(auto &el:path.airPoint)
+        scene->addEllipse(el.x,el.y,5,5,QPen(Qt::black),QBrush(Qt::green));
+}
+
+void UPointer::flight2(int num, flightRoute path)
+{      if(p.airPoint.size()>(num)){
+        iPoint last=path.airPoint.at(num-1);
+        iPoint next=path.airPoint.at(num);
+        fPoint f=calcDelta(last,next,2000);
+        AirObject *obj=new AirObject(f.x,f.y,calcAngle(last,next));
+        obj->setPos(last.x+3,last.y+3);
+        obj->setMoveNumber(moveNumber(last,next,2000));
+        scene->addItem(obj);
+        path.count++;
+        obj->setFlightRote(path);
+        obj->setCount(path.count);
+        connect(obj,&AirObject::signalFinish,this, &UPointer::flight2);
+    }
+}
+
+void UPointer::flight(flightRoute path)
+{   iPoint last;
+    this->p=path;
+    path.count=1;
+    if(path.airPoint.size()>1){
+        last=path.airPoint.at(0);
+        fPoint f=calcDelta(last,path.airPoint.at(1),2000);
+        AirObject *obj=new AirObject(f.x,f.y,calcAngle(last,path.airPoint.at(1)));
+        obj->setPos(last.x+3,last.y+3);
+        obj->setMoveNumber(moveNumber(last,path.airPoint.at(1),2000));
+        scene->addItem(obj);
+        path.count++;
+        obj->setFlightRote(path);
+        obj->setCount(path.count);
+        connect(obj,&AirObject::signalFinish,this, &UPointer::flight2);
+    }
 }
 
 fPoint UPointer::toCoord(iPoint position){
@@ -162,7 +207,22 @@ fPoint UPointer::getzPosition(){
 fPoint UPointer::getlastPosition(){
     return conf.lastPosition;
 }
+void UPointer::addConfAir(flightRoute path)
+{
+    conf.airObject.append(path);
+}
+iConfig UPointer::getConfig()
+{
+    return conf;
+}
 
+void UPointer::drawAir()
+{
+    for(auto el:conf.airObject){
+        drawPath(el);
+        flight(el);
+    }
+}
 
 void UPointer::reLoad(){
     QString filename = confdir+"config.ob";
@@ -174,6 +234,7 @@ void UPointer::reLoad(){
             QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
             in >> conf;
             QApplication::restoreOverrideCursor();
+            std::cout<<"I is reload"<<"\n";
         }
         loadFile.close();
     } else {
@@ -187,16 +248,23 @@ void UPointer::reLoad(){
         last.x = 0.0;
         last.y = 0.0;
         conf.lastPosition = last;
-
+//----------------------------------------
+// Create first flightRoute
         iPoint i;
         i.x=10+967,i.y=10+603;
         iPoint j;
-        j.x=150+967,j.y=150+603;
+        j.x=120+967,j.y=45+603;
+        iPoint q;
+        q.x=200+967,q.y=250+603;
         flightRoute firstRoute;
         firstRoute.targetNumber=1;
         firstRoute.airPoint.append(i);
         firstRoute.airPoint.append(j);
+        firstRoute.airPoint.append(q);
+        firstRoute.OGP=0;
+        firstRoute.typeAirObj=0;
         conf.airObject.append(firstRoute);
+//-----------------------------------------
     }
 
 }

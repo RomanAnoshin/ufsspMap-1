@@ -18,17 +18,20 @@ SOURCES += main.cpp\
     scenetypes.cpp \
     adminform.cpp \
     airobject.cpp \
-    graphicsscene.cpp
+    graphicsscene.cpp \
+    moveitem.cpp
 
 HEADERS  += mainmap.h \
     scenetypes.h \
     upointer.h \
     adminform.h \
     airobject.h \
-    graphicsscene.h
+    graphicsscene.h \
+    moveitem.h
 
 FORMS    += mainmap.ui \
     adminform.ui
 
 RESOURCES += \
-    src.qrc
+    src.qrc \
+    buttonimage.qrc
