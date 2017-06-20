@@ -565,7 +565,7 @@ border: none;
      </widget>
      <widget class="QWidget" name="tabAirObject">
       <attribute name="title">
-       <string>Воздушные объект</string>
+       <string>Воздушные объекты</string>
       </attribute>
       <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
@@ -725,10 +725,106 @@ border: none;
        </layout>
       </widget>
      </widget>
+     <widget class="QWidget" name="tabTraining">
+      <attribute name="title">
+       <string>Налет</string>
+      </attribute>
+      <widget class="QListWidget" name="listWidgetFirst">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>10</y>
+         <width>151</width>
+         <height>251</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QListWidget" name="listWidgetSecond">
+       <property name="geometry">
+        <rect>
+         <x>230</x>
+         <y>10</y>
+         <width>151</width>
+         <height>251</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="play">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>270</y>
+         <width>91</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>ПУСК</string>
+       </property>
+      </widget>
+      <widget class="QWidget" name="">
+       <property name="geometry">
+        <rect>
+         <x>179</x>
+         <y>35</y>
+         <width>41</width>
+         <height>121</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_5">
+        <item>
+         <widget class="QPushButton" name="addItem">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="buttonimage.qrc">
+            <normaloff>:/icon/player_end.png</normaloff>:/icon/player_end.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="removeItem">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="buttonimage.qrc">
+            <normaloff>:/icon/player_start.png</normaloff>:/icon/player_start.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="addAll">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="buttonimage.qrc">
+            <normaloff>:/icon/player_fwd.png</normaloff>:/icon/player_fwd.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="removeAll">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="buttonimage.qrc">
+            <normaloff>:/icon/player_rev.png</normaloff>:/icon/player_rev.png</iconset>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
     </widget>
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="buttonimage.qrc"/>
+ </resources>
  <connections/>
 </ui>

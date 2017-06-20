@@ -8,6 +8,7 @@ AirObject::AirObject(): QGraphicsItem()
     count=0;
     count2=0;
     moveNumber=0;
+    color=QColor(Qt::white);
 }
 
 AirObject::AirObject(float dx, float dy, qreal angle): AirObject()
@@ -67,8 +68,8 @@ void AirObject::setRectItem(int x, int y, int w, int h)
 
 void AirObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    painter->setBrush(Qt::white);
-    painter->setPen(Qt::white);
+    painter->setBrush(color);
+    painter->setPen(color);
     QRect r(-2,-2,4,4);
     painter->drawEllipse(r);
     painter->drawLine(0,0,0,-10);
@@ -79,4 +80,9 @@ void AirObject::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 void AirObject::setCount(int i)
 {
     this->count2=i;
+}
+
+void AirObject::setColor(QColor color)
+{
+    this->color=color;
 }

@@ -22,7 +22,7 @@ public:
     void setRectItem(int x, int y, int w, int h);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     void setCount(int i);
-
+    void setColor(QColor color);
 signals:
     void signalFinish(int count, flightRoute path);
 
@@ -38,6 +38,7 @@ private:
     int count;
     int count2;
     flightRoute path;
+    QColor color;
 };
 
 #endif // AIROBJECT_H

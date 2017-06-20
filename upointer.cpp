@@ -14,12 +14,49 @@ UPointer::UPointer(QString mainConfDir, QObject *parent) : QObject(parent), isEd
     imgWidth = pic.width();
     imgHeight = pic.height();
     scene->addPixmap(pic);
+    //-----------------------------------------
+    QPixmap pic1=QPixmap(":/MyImage/foreign.png");
+    QGraphicsPixmapItem* item=new QGraphicsPixmapItem();
+    item->setPixmap(pic1);
+    item->setPos(889,389);
+    scene->addItem(item);
+    QGraphicsPixmapItem* item7=new QGraphicsPixmapItem();
+    item7->setPixmap(pic1);
+    item7->setPos(673,584);
+    scene->addItem(item7);
+
+    QPixmap pic2=QPixmap(":/MyImage/own.png");
+    QGraphicsPixmapItem* item2=new QGraphicsPixmapItem();
+    item2->setPixmap(pic2);
+    item2->setPos(1394,598);
+    scene->addItem(item2);
+    QGraphicsPixmapItem* item3=new QGraphicsPixmapItem();
+    item3->setPixmap(pic2);
+    item3->setPos(1122,922);
+    scene->addItem(item3);
+    QPixmap pic4=QPixmap(":/MyImage/KP_RTV.png");
+    QGraphicsPixmapItem* item4=new QGraphicsPixmapItem();
+    item4->setPixmap(pic4);
+    item4->setPos(1368,579);
+    scene->addItem(item4);
+    QPixmap pic5=QPixmap(":/MyImage/PU-ORLR.png");
+    QGraphicsPixmapItem* item5=new QGraphicsPixmapItem();
+    item5->setPixmap(pic5);
+    item5->setPos(876,755);
+    scene->addItem(item5);
+    QGraphicsPixmapItem* item6=new QGraphicsPixmapItem();
+    item6->setPixmap(pic5);
+    item6->setPos(1074,527);
+    scene->addItem(item6);
+
+    //------------------------------------------
     mainPosition.x = 0;
     mainPosition.y = 0;
     // создание таймера для анимации воздушных целей
     animationTimer=new QTimer(this);
     connect(animationTimer, SIGNAL(timeout()), scene, SLOT(advance()));
     animationTimer->start(1000);
+
     //------------------------------------------
     //    MoveItem* item=new MoveItem();
     //    item->setPos(947,563);
@@ -94,6 +131,8 @@ void UPointer::addImg(iDataImages image){
 float UPointer:: calcAngle(iPoint begin, iPoint end)
 {    float hyp=::sqrt(pow(end.x-begin.x,2)+pow(end.y-begin.y,2));
      float angle=::acos((end.x-begin.x)/hyp);
+      if((end.y-begin.y)<0){
+          angle=2*PI-angle;}
       while(angle<0)
           angle+=2*PI;
        while(angle>2*PI)
@@ -134,6 +173,7 @@ void UPointer::flight2(int num, flightRoute path)
         AirObject *obj=new AirObject(f.x,f.y,calcAngle(last,next));
         obj->setPos(last.x+3,last.y+3);
         obj->setMoveNumber(moveNumber(last,next,2000));
+        obj->setColor(getColor(path.OGP));
         scene->addItem(obj);
         path.count++;
         obj->setFlightRote(path);
@@ -152,6 +192,7 @@ void UPointer::flight(flightRoute path)
         AirObject *obj=new AirObject(f.x,f.y,calcAngle(last,path.airPoint.at(1)));
         obj->setPos(last.x+3,last.y+3);
         obj->setMoveNumber(moveNumber(last,path.airPoint.at(1),2000));
+        obj->setColor(getColor(path.OGP));
         scene->addItem(obj);
         path.count++;
         obj->setFlightRote(path);
@@ -175,6 +216,15 @@ iPoint UPointer::fromCoord(fPoint coord){
     position.x = (int)(imgWidth*coord.x/deltaX);
     position.y = (int)(imgHeight*coord.y/deltaY);
     return position;
+}
+
+QColor UPointer::getColor(int i)
+{
+    if(i==0)
+        return QColor(Qt::green);
+    if(i==1)
+        return QColor(Qt::red);
+    return QColor(Qt::lightGray);
 }
 void UPointer::addLine(iDataLines line){
     if(line.data.size() == 0)
@@ -218,8 +268,8 @@ iConfig UPointer::getConfig()
 
 void UPointer::drawAir()
 {
-    for(auto el:conf.airObject){
-        drawPath(el);
+    for(auto el:trainingConf.airObject){
+       // drawPath(el);
         flight(el);
     }
 }
@@ -286,4 +336,9 @@ void UPointer::save() {
     out << conf;
     QApplication::restoreOverrideCursor();
     loadFile.close();
+}
+
+void UPointer::setTrainingConf(iConfig conf)
+{
+    this->trainingConf=conf;
 }

@@ -51,6 +51,16 @@ private slots:
 
     void on_saveNewPath_clicked();
 
+    void on_addItem_clicked();
+
+    void on_removeItem_clicked();
+
+    void on_addAll_clicked();
+
+    void on_removeAll_clicked();
+
+    void on_play_clicked();
+
 private:
     Ui::AdminForm *ui;
     UPointer *upointer;
@@ -61,6 +71,8 @@ private:
     void installTypeAirObject();
     void isActiveComboBox(bool isActive);
     void instalSettingsPath();
+    void loadTabTraining();
+    iConfig secondListConfig;
 };
 
 #endif // ADMINFORM_H

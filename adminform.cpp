@@ -1,3 +1,4 @@
+
 #include "adminform.h"
 #include "ui_adminform.h"
 #include <QFileDialog>
@@ -55,11 +56,12 @@ void AdminForm::setPointer(UPointer *up){
     ui->y1->setValue((double)lastPoint.y);
     lockPoint = false;
     for(auto &el:upointer->getConfig().airObject)
-    ui->numberPath->addItem(QString::number(el.targetNumber),1);
+        ui->numberPath->addItem(QString::number(el.targetNumber),1);
     countTargetNumber=upointer->getConfig().airObject.size();
     installOGP();
     installTypeAirObject();
     ui->numberPath->setCurrentIndex(0);
+    loadTabTraining();
     //   isActiveComboBox(true);
 }
 
@@ -72,8 +74,8 @@ void AdminForm::reloadNumberPathPoint()
 
 void AdminForm::onNumberPathPointSelect(int i)
 {
- upointer->getScene()->selectInNumberPathPoint=i;
- upointer->getScene()->drawPath();
+    upointer->getScene()->selectInNumberPathPoint=i;
+    upointer->getScene()->drawPath();
 }
 
 void AdminForm::setOGP(int i)
@@ -156,8 +158,9 @@ void AdminForm::on_deletePath_clicked()
 
 void AdminForm::on_saveNewPath_clicked()
 {    path=upointer->getScene()->getPath();
+     if(!path.airPoint.isEmpty())
      upointer->reWritePath(path);
-//     upointer->save();
+           upointer->save();
 }
 
 void AdminForm::installOGP()
@@ -176,13 +179,13 @@ void AdminForm::installTypeAirObject()
 void AdminForm::isActiveComboBox(bool isActive)
 {
     if(!isActive){
-    ui->OGP->setItemData(0," ", Qt::UserRole - 1);
-    ui->OGP->setItemData(1," ", Qt::UserRole - 1);
-    ui->OGP->setItemData(2," ", Qt::UserRole - 1);
+        ui->OGP->setItemData(0," ", Qt::UserRole - 1);
+        ui->OGP->setItemData(1," ", Qt::UserRole - 1);
+        ui->OGP->setItemData(2," ", Qt::UserRole - 1);
 
-    ui->typeAirObject->setItemData(0," ", Qt::UserRole - 1);
-    ui->typeAirObject->setItemData(1," ", Qt::UserRole - 1);
-    ui->typeAirObject->setItemData(2," ", Qt::UserRole - 1);
+        ui->typeAirObject->setItemData(0," ", Qt::UserRole - 1);
+        ui->typeAirObject->setItemData(1," ", Qt::UserRole - 1);
+        ui->typeAirObject->setItemData(2," ", Qt::UserRole - 1);
     }
     else{
         ui->OGP->setItemData(0," ", Qt::UserRole);
@@ -203,7 +206,10 @@ void AdminForm::onDrawAirPoint(int i)
         upointer->getScene()->setIsCreatePath(false);
         upointer->getScene()->deleteSceneItem();
     }
- }
+    if(i==3){
+        loadTabTraining();
+    }
+}
 
 void AdminForm::parseValueToInt(QString s)
 {
@@ -228,4 +234,52 @@ void AdminForm::instalSettingsPath()
     ui->typeAirObject->setCurrentIndex(path.typeAirObj);
 }
 
+void AdminForm::loadTabTraining()
+{
+    ui->listWidgetFirst->clear();
+    for(auto &el:upointer->getConfig().airObject)
+        ui->listWidgetFirst->addItem(QString::number(el.targetNumber));
+}
 
+
+
+void AdminForm::on_addItem_clicked()
+{   bool b=true;
+    QModelIndex i=ui->listWidgetFirst->currentIndex();
+    if(i.row()>=0){
+    flightRoute myPath=upointer->getConfig().airObject.at(i.row());
+    for(auto &el:secondListConfig.airObject)
+       (el.targetNumber==myPath.targetNumber)?b=b&&false:b=b&&true;
+    if(b){
+    ui->listWidgetSecond->addItem(QString::number(myPath.targetNumber));
+    secondListConfig.airObject.append(myPath);}}
+}
+
+void AdminForm::on_removeItem_clicked()
+{   QModelIndex i=ui->listWidgetSecond->currentIndex();
+    secondListConfig.airObject.removeAt(i.row());
+    ui->listWidgetSecond->clear();
+    for(auto &el:secondListConfig.airObject)
+        ui->listWidgetSecond->addItem(QString::number(el.targetNumber));
+}
+
+void AdminForm::on_addAll_clicked()
+{   ui->listWidgetSecond->clear();
+    secondListConfig.airObject.clear();
+    secondListConfig.airObject=upointer->getConfig().airObject;
+    for(auto &el:secondListConfig.airObject)
+        ui->listWidgetSecond->addItem(QString::number(el.targetNumber));
+}
+
+void AdminForm::on_removeAll_clicked()
+{
+    ui->listWidgetSecond->clear();
+    secondListConfig.airObject.clear();
+}
+
+void AdminForm::on_play_clicked()
+{
+ //   upointer->getScene()->clear();
+    upointer->setTrainingConf(secondListConfig);
+    upointer->drawAir();
+}

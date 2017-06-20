@@ -43,6 +43,7 @@ public:
     iConfig getConfig();
     void drawAir();
     void save();
+    void setTrainingConf(iConfig conf);
  //   void reLoad();
 
 signals:   
@@ -60,6 +61,7 @@ private:
     void reLoad();
 
     iConfig conf;
+    iConfig trainingConf;
     QList <int> groupList;
     void loadGroup(int groupNumber);
     void addLine(iDataLines line);
@@ -77,6 +79,7 @@ private:
     bool isEditImg;
     iDataLines *dl;
     iDataImages *di;
+    QColor getColor(int i);
 };
 
 #endif // UPOINTER_H
