@@ -23,6 +23,13 @@ MainMap::MainMap(QWidget *parent) :
     // отображение положения курсора на сцене в Дисплее
     connect(upointer->getScene(), SIGNAL(signalCursor(QPointF)), this,SLOT(slotDisplay(QPointF)));
     ui->graphicsView->setMouseTracking(true);
+    this->ui->label_2->setStyleSheet("background-color: rgb(56, 235,229)");
+    this->setSubButtonStYle();
+    QTimer* timer=new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(setDateTime()));
+    timer->start(1000);
+
+    ui->pushButtonStatic->setMenu(createStaticMenu());
 
 }
 void MainMap::resizeEvent(QResizeEvent* event) {
@@ -55,6 +62,33 @@ void MainMap::on_btnRG_clicked()
                            qApp->desktop()->availableGeometry()
                            ));
     admin->show();
+}
+
+void MainMap::setDateTime()
+{
+    QDateTime DaTi=QDateTime::currentDateTime();
+    ui->label->setText(DaTi.date().toString("dd-MM")+
+   "  "+DaTi.time().toString("hh:mm:ss"));
+}
+
+void MainMap::setSubButtonStYle()
+{
+    ui->subButton->setStyleSheet("color: rgb(195, 175,8)");
+    ui->subButton->setEnabled(false);
+    ui->subButton2->setStyleSheet("color: rgb(195, 175,8)");
+    ui->subButton2->setEnabled(false);
+    ui->subButton3->setStyleSheet("color: rgb(195, 175,8)");
+    ui->subButton3->setEnabled(false);
+
+}
+
+QMenu * MainMap::createStaticMenu()
+{   QMenu * menu=new QMenu(this);
+    QAction* first=new QAction(trUtf8("Показать свои"), this);
+    QAction* second=new QAction(trUtf8("Показать чужии"), this);
+    menu->addAction(first);
+    menu->addAction(second);
+    return menu;
 }
 
 

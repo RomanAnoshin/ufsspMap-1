@@ -15,39 +15,73 @@ UPointer::UPointer(QString mainConfDir, QObject *parent) : QObject(parent), isEd
     imgHeight = pic.height();
     scene->addPixmap(pic);
     //-----------------------------------------
+    //------------foreign------------------------
     QPixmap pic1=QPixmap(":/MyImage/foreign.png");
-    QGraphicsPixmapItem* item=new QGraphicsPixmapItem();
-    item->setPixmap(pic1);
-    item->setPos(889,389);
-    scene->addItem(item);
-    QGraphicsPixmapItem* item7=new QGraphicsPixmapItem();
-    item7->setPixmap(pic1);
-    item7->setPos(673,584);
-    scene->addItem(item7);
+    QGraphicsPixmapItem* foreignItem=new QGraphicsPixmapItem();
+    foreignItem->setPixmap(pic1);
+    foreignItem->setPos(519-10,615-10);
+    scene->addItem(foreignItem);
+    QGraphicsPixmapItem* foreignItem2=new QGraphicsPixmapItem();
+    foreignItem2->setPixmap(pic1);
+    foreignItem2->setPos(544-10,645-10);
+    scene->addItem(foreignItem2);
+    QGraphicsPixmapItem* foreignItem3=new QGraphicsPixmapItem();
+    foreignItem3->setPixmap(pic1);
+    foreignItem3->setPos(517-10,743-10);
+    scene->addItem(foreignItem3);
+    QGraphicsPixmapItem* foreignItem4=new QGraphicsPixmapItem();
+    foreignItem4->setPixmap(pic1);
+    foreignItem4->setPos(590-10,748-10);
+    scene->addItem(foreignItem4);
 
+    //----------------own---------------------------------
     QPixmap pic2=QPixmap(":/MyImage/own.png");
-    QGraphicsPixmapItem* item2=new QGraphicsPixmapItem();
-    item2->setPixmap(pic2);
-    item2->setPos(1394,598);
-    scene->addItem(item2);
-    QGraphicsPixmapItem* item3=new QGraphicsPixmapItem();
-    item3->setPixmap(pic2);
-    item3->setPos(1122,922);
-    scene->addItem(item3);
+    QGraphicsPixmapItem* OwnItem=new QGraphicsPixmapItem();
+    OwnItem->setPixmap(pic2);
+    OwnItem->setPos(939,750);
+    scene->addItem(OwnItem);
+    QGraphicsPixmapItem* OwnItem2=new QGraphicsPixmapItem();
+    OwnItem2->setPixmap(pic2);
+    OwnItem2->setPos(791,696);
+    scene->addItem(OwnItem2);
+    QGraphicsPixmapItem* OwnItem3=new QGraphicsPixmapItem();
+    OwnItem3->setPixmap(pic2);
+    OwnItem3->setPos(715,796);
+    scene->addItem(OwnItem3);
+    QGraphicsPixmapItem* OwnItem4=new QGraphicsPixmapItem();
+    OwnItem4->setPixmap(pic2);
+    OwnItem4->setPos(653,683);
+    scene->addItem(OwnItem4);
+    QGraphicsPixmapItem* OwnItem5=new QGraphicsPixmapItem();
+    OwnItem5->setPixmap(pic2);
+    OwnItem5->setPos(663,551);
+    scene->addItem(OwnItem5);
+
+    //-------------------KP_RTV-----------------------
     QPixmap pic4=QPixmap(":/MyImage/KP_RTV.png");
     QGraphicsPixmapItem* item4=new QGraphicsPixmapItem();
     item4->setPixmap(pic4);
-    item4->setPos(1368,579);
+    item4->setPos(667,570);
     scene->addItem(item4);
+
+    //---------------PU_ORLR---------------------------
     QPixmap pic5=QPixmap(":/MyImage/PU-ORLR.png");
-    QGraphicsPixmapItem* item5=new QGraphicsPixmapItem();
-    item5->setPixmap(pic5);
-    item5->setPos(876,755);
-    scene->addItem(item5);
-    QGraphicsPixmapItem* item6=new QGraphicsPixmapItem();
-    item6->setPixmap(pic5);
-    item6->setPos(1074,527);
-    scene->addItem(item6);
+    QGraphicsPixmapItem* PuItem=new QGraphicsPixmapItem();
+    PuItem->setPixmap(pic5);
+    PuItem->setPos(704,480);
+    scene->addItem(PuItem);
+    QGraphicsPixmapItem* PuItem1=new QGraphicsPixmapItem();
+    PuItem1->setPixmap(pic5);
+    PuItem1->setPos(631,586);
+    scene->addItem(PuItem1);
+    QGraphicsPixmapItem* PuItem2=new QGraphicsPixmapItem();
+    PuItem2->setPixmap(pic5);
+    PuItem2->setPos(649,710);
+    scene->addItem(PuItem2);
+    QGraphicsPixmapItem* PuItem3=new QGraphicsPixmapItem();
+    PuItem3->setPixmap(pic5);
+    PuItem3->setPos(740,834);
+    scene->addItem(PuItem3);
 
     //------------------------------------------
     mainPosition.x = 0;
