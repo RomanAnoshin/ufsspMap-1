@@ -8,5 +8,6 @@
         <file>MyImage/own.png</file>
         <file>MyImage/KP_RTV.png</file>
         <file>MyImage/PU-ORLR.png</file>
+        <file>MyImage/KP_RTB.png</file>
     </qresource>
 </RCC>

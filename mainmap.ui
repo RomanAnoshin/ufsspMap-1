@@ -175,7 +175,7 @@ border: none;
          </font>
         </property>
         <property name="text">
-         <string>МИРЖ</string>
+         <string>МИР</string>
         </property>
        </widget>
        <widget class="QPushButton" name="pushButton">
@@ -605,7 +605,7 @@ border: none;
          </font>
         </property>
         <property name="text">
-         <string>ФОРМВО</string>
+         <string>ФОРМ.ВО</string>
         </property>
        </widget>
        <widget class="QPushButton" name="pushButton_27">
@@ -763,6 +763,13 @@ border: none;
          <number>0</number>
         </property>
         <item>
+         <widget class="QPushButton" name="subButton2">
+          <property name="text">
+           <string>117</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QPushButton" name="subButton3">
           <property name="text">
            <string>555</string>
@@ -773,13 +780,6 @@ border: none;
          <widget class="QPushButton" name="subButton">
           <property name="text">
            <string>97</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="subButton2">
-          <property name="text">
-           <string>117</string>
           </property>
          </widget>
         </item>

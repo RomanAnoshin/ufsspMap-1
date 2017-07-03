@@ -1,8 +1,10 @@
-
-#include "adminform.h"
-#include "ui_adminform.h"
 #include <QFileDialog>
 #include <QMessageBox>
+#include <iostream>
+#include <QFile>
+#include <QIODevice>
+#include "adminform.h"
+#include "ui_adminform.h"
 
 AdminForm::AdminForm(QWidget *parent) :
     QWidget(parent),
@@ -62,7 +64,6 @@ void AdminForm::setPointer(UPointer *up){
     installTypeAirObject();
     ui->numberPath->setCurrentIndex(0);
     loadTabTraining();
-    //   isActiveComboBox(true);
 }
 
 void AdminForm::reloadNumberPathPoint()
@@ -159,8 +160,8 @@ void AdminForm::on_deletePath_clicked()
 void AdminForm::on_saveNewPath_clicked()
 {    path=upointer->getScene()->getPath();
      if(!path.airPoint.isEmpty())
-     upointer->reWritePath(path);
-           upointer->save();
+         upointer->reWritePath(path);
+     upointer->save();
 }
 
 void AdminForm::installOGP()
@@ -247,12 +248,12 @@ void AdminForm::on_addItem_clicked()
 {   bool b=true;
     QModelIndex i=ui->listWidgetFirst->currentIndex();
     if(i.row()>=0){
-    flightRoute myPath=upointer->getConfig().airObject.at(i.row());
-    for(auto &el:secondListConfig.airObject)
-       (el.targetNumber==myPath.targetNumber)?b=b&&false:b=b&&true;
-    if(b){
-    ui->listWidgetSecond->addItem(QString::number(myPath.targetNumber));
-    secondListConfig.airObject.append(myPath);}}
+        flightRoute myPath=upointer->getConfig().airObject.at(i.row());
+        for(auto &el:secondListConfig.airObject)
+            (el.targetNumber==myPath.targetNumber)?b=b&&false:b=b&&true;
+        if(b){
+            ui->listWidgetSecond->addItem(QString::number(myPath.targetNumber));
+            secondListConfig.airObject.append(myPath);}}
 }
 
 void AdminForm::on_removeItem_clicked()
@@ -278,8 +279,50 @@ void AdminForm::on_removeAll_clicked()
 }
 
 void AdminForm::on_play_clicked()
-{
- //   upointer->getScene()->clear();
+{    //   upointer->getScene()->clear();
     upointer->setTrainingConf(secondListConfig);
     upointer->drawAir();
+}
+
+void AdminForm::on_saveFlying_clicked()
+{
+    QString str=QFileDialog::getSaveFileName(0,"Save Flying ", upointer->getConfDir()+"Flying","Object (*.ob);;All files (*.*)");
+    if (str.isEmpty()) {
+        return;
+    }
+    QFile file(str);
+    if(file.open(QIODevice::WriteOnly)){
+        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+        QDataStream out(&file);
+        out.setVersion(QDataStream::Qt_5_3);
+        out << upointer->getConfig();
+        QApplication::restoreOverrideCursor();
+        file.close();
+    }
+}
+
+void AdminForm::on_loadFlying_clicked()
+{    QString str=QFileDialog::getOpenFileName(0,"Load Flying ",upointer->getConfDir(),"Object (*.ob);;All files (*.*)");
+     if (str != "") {
+         QFile file(str);
+         if (!file.open(QIODevice::ReadOnly)) {
+             QMessageBox::critical(this, tr("Error"), tr("Could not open file"));
+             return;
+         }
+         QDataStream in(&file);
+         in.setVersion(QDataStream::Qt_5_3);
+         QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+         iConfig newConfig;
+         in>>newConfig;
+         for(auto &el:upointer->getConfig().airObject)
+             ui->numberPath->removeItem(0);
+         upointer->setAirObjectConf(newConfig);
+         for(auto &el:upointer->getConfig().airObject)
+             ui->numberPath->addItem(QString::number(el.targetNumber),1);
+         countTargetNumber=upointer->getConfig().airObject.size();
+         loadTabTraining();
+         file.close();
+         upointer->save();
+         QApplication::restoreOverrideCursor();
+     }
 }

@@ -83,11 +83,26 @@ void MainMap::setSubButtonStYle()
 }
 
 QMenu * MainMap::createStaticMenu()
-{   QMenu * menu=new QMenu(this);
-    QAction* first=new QAction(trUtf8("Показать свои"), this);
-    QAction* second=new QAction(trUtf8("Показать чужии"), this);
-    menu->addAction(first);
-    menu->addAction(second);
+{   QMenu* menu=new QMenu(this);
+    QMenu* first=new QMenu(trUtf8("Дислокация"), this);
+    QMenu* menu1=new QMenu(trUtf8("Аэродромы"), this);
+    QAction* third=new QAction(trUtf8("Сетка"), this);
+    QAction* f4=new QAction(trUtf8("Карта"), this);
+    QAction* f5=new QAction(trUtf8("Полосы"), this);
+    QAction* f6=new QAction(trUtf8("Трассы"), this);
+    QAction* f7=new QAction(trUtf8("Гран. ответ."), this);
+    QAction* f8=new QAction(trUtf8("зоны и рубежи"), this);
+    menu->addMenu(first);
+    menu->addMenu(menu1);
+    menu1->addAction("Все аэродромы",upointer,SLOT(airfieldAll()));
+    menu1->addAction("Свои",upointer,SLOT(airfieldOwn()));
+    menu1->addAction("Чужие",upointer,SLOT(airfieldForeign()));
+    menu->addAction(third);
+    menu->addAction(f4);
+    menu->addAction(f5);
+    menu->addAction(f6);
+    menu->addAction(f7);
+    menu->addAction(f8);
     return menu;
 }
 

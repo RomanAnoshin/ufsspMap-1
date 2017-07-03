@@ -22,6 +22,11 @@
 #include "scenetypes.h"
 #include "airobject.h"
 #include "moveitem.h"
+#include "sceneitem.h"
+#include "targetnumber.h"
+
+
+static float const PI=3.14159265358979323846;
 
 class UPointer : public QObject
 {
@@ -44,10 +49,14 @@ public:
     void drawAir();
     void save();
     void setTrainingConf(iConfig conf);
+    void setAirObjectConf(iConfig conf);
  //   void reLoad();
 
 signals:   
 public slots:
+ void airfieldAll();
+ void airfieldOwn();
+ void airfieldForeign();
  void flight2(int num, flightRoute path);
 private:
     fPoint calcDelta(iPoint begin,iPoint end, float speed);
@@ -80,6 +89,10 @@ private:
     iDataLines *dl;
     iDataImages *di;
     QColor getColor(int i);
+    QList <SceneItem*> itemSceneList;
+    bool isAirfieldAll;
+    bool isAirfieldOwn;
+    bool isAirfieldForeign;
 };
 
 #endif // UPOINTER_H

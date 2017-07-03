@@ -15,10 +15,10 @@ AirObject::AirObject(float dx, float dy, qreal angle): AirObject()
 {   this->angle=angle;
     this->dx=dx;
     this->dy=dy;
-    posX = -10;
-    posY = -10;
-    width = 20;
-    height = 20;
+    posX = -5;
+    posY = -5;
+    width = 10;
+    height = 10;
     setRotation(angle);
 }
 
@@ -44,12 +44,13 @@ void AirObject::advance(int phase)
 {   if(phase){
         if(count==moveNumber){
             signalFinish(path.count, path);
+            signalDelete();
             delete this;
             return;
         }
         if(((++count)%5)==0){
-            moveBy(dx*5,dy*5);
-            //-------------------------------------------------
+            moveBy(dx*10,dy*10);
+            //--------------------------------------
         }
     }}
 

@@ -8,6 +8,7 @@
 
 
 
+
 class AirObject :  public QObject, public QGraphicsItem
 {
     Q_OBJECT
@@ -25,6 +26,7 @@ public:
     void setColor(QColor color);
 signals:
     void signalFinish(int count, flightRoute path);
+    void signalDelete();
 
 protected:
     QRectF boundingRect() const;

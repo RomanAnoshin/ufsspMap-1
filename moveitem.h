@@ -9,8 +9,6 @@
 #include <QCursor>
 #include <iostream>
 
-
-
 class MoveItem: public QObject, public QGraphicsItem
 {
     Q_OBJECT

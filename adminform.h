@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <string>
+#include <QFileDialog>
 #include "upointer.h"
 
 using namespace  std;
@@ -60,6 +61,10 @@ private slots:
     void on_removeAll_clicked();
 
     void on_play_clicked();
+
+    void on_saveFlying_clicked();
+
+    void on_loadFlying_clicked();
 
 private:
     Ui::AdminForm *ui;

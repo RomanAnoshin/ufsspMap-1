@@ -1,6 +1,5 @@
 #include "upointer.h"
 #include "iostream"
-static float const PI=3.14159265358979323846;
 
 
 
@@ -16,72 +15,83 @@ UPointer::UPointer(QString mainConfDir, QObject *parent) : QObject(parent), isEd
     scene->addPixmap(pic);
     //-----------------------------------------
     //------------foreign------------------------
-    QPixmap pic1=QPixmap(":/MyImage/foreign.png");
-    QGraphicsPixmapItem* foreignItem=new QGraphicsPixmapItem();
-    foreignItem->setPixmap(pic1);
+    SceneItem* foreignItem=new SceneItem(FOREIGN);
     foreignItem->setPos(519-10,615-10);
     scene->addItem(foreignItem);
-    QGraphicsPixmapItem* foreignItem2=new QGraphicsPixmapItem();
-    foreignItem2->setPixmap(pic1);
+    itemSceneList.append(foreignItem);
+    SceneItem* foreignItem2=new  SceneItem(FOREIGN);
     foreignItem2->setPos(544-10,645-10);
     scene->addItem(foreignItem2);
-    QGraphicsPixmapItem* foreignItem3=new QGraphicsPixmapItem();
-    foreignItem3->setPixmap(pic1);
+    itemSceneList.append(foreignItem2);
+    SceneItem* foreignItem3=new  SceneItem(FOREIGN);
     foreignItem3->setPos(517-10,743-10);
     scene->addItem(foreignItem3);
-    QGraphicsPixmapItem* foreignItem4=new QGraphicsPixmapItem();
-    foreignItem4->setPixmap(pic1);
+    itemSceneList.append(foreignItem3);
+    SceneItem* foreignItem4=new  SceneItem(FOREIGN);
     foreignItem4->setPos(590-10,748-10);
     scene->addItem(foreignItem4);
+    itemSceneList.append(foreignItem4);
 
     //----------------own---------------------------------
-    QPixmap pic2=QPixmap(":/MyImage/own.png");
-    QGraphicsPixmapItem* OwnItem=new QGraphicsPixmapItem();
-    OwnItem->setPixmap(pic2);
+    SceneItem* OwnItem=new  SceneItem(OWN);
     OwnItem->setPos(939,750);
     scene->addItem(OwnItem);
-    QGraphicsPixmapItem* OwnItem2=new QGraphicsPixmapItem();
-    OwnItem2->setPixmap(pic2);
+    itemSceneList.append(OwnItem);
+    SceneItem* OwnItem2=new SceneItem(OWN);
     OwnItem2->setPos(791,696);
     scene->addItem(OwnItem2);
-    QGraphicsPixmapItem* OwnItem3=new QGraphicsPixmapItem();
-    OwnItem3->setPixmap(pic2);
+    itemSceneList.append(OwnItem2);
+    SceneItem* OwnItem3=new SceneItem(OWN);
     OwnItem3->setPos(715,796);
     scene->addItem(OwnItem3);
-    QGraphicsPixmapItem* OwnItem4=new QGraphicsPixmapItem();
-    OwnItem4->setPixmap(pic2);
+    itemSceneList.append(OwnItem3);
+    SceneItem* OwnItem4=new SceneItem(OWN);
     OwnItem4->setPos(653,683);
     scene->addItem(OwnItem4);
-    QGraphicsPixmapItem* OwnItem5=new QGraphicsPixmapItem();
-    OwnItem5->setPixmap(pic2);
+    itemSceneList.append(OwnItem4);
+    SceneItem* OwnItem5=new SceneItem(OWN);
     OwnItem5->setPos(663,551);
     scene->addItem(OwnItem5);
+    itemSceneList.append(OwnItem5);
+    SceneItem* OwnItem6=new SceneItem(OWN);
+    OwnItem6->setPos(1033,535);
+    scene->addItem(OwnItem6);
+    itemSceneList.append(OwnItem6);
+
+    //-------------------KP_RTB-----------------------
+    SceneItem* item4=new SceneItem(5);
+    item4->setPos(667,560);
+    scene->addItem(item4);
+    itemSceneList.append(item4);
+    SceneItem* KP_RTB=new SceneItem(5);
+    KP_RTB->setPos(856,643);
+    scene->addItem(KP_RTB);
+    itemSceneList.append(KP_RTB);
 
     //-------------------KP_RTV-----------------------
-    QPixmap pic4=QPixmap(":/MyImage/KP_RTV.png");
-    QGraphicsPixmapItem* item4=new QGraphicsPixmapItem();
-    item4->setPixmap(pic4);
-    item4->setPos(667,570);
-    scene->addItem(item4);
+    SceneItem* KP1=new SceneItem(KP_RTV);
+    KP1->setPos(890,660);
+    scene->addItem(KP1);
+    itemSceneList.append(KP1);
+
 
     //---------------PU_ORLR---------------------------
-    QPixmap pic5=QPixmap(":/MyImage/PU-ORLR.png");
-    QGraphicsPixmapItem* PuItem=new QGraphicsPixmapItem();
-    PuItem->setPixmap(pic5);
+    SceneItem* PuItem=new SceneItem(PU_ORLR);
     PuItem->setPos(704,480);
     scene->addItem(PuItem);
-    QGraphicsPixmapItem* PuItem1=new QGraphicsPixmapItem();
-    PuItem1->setPixmap(pic5);
+    itemSceneList.append(PuItem);
+    SceneItem* PuItem1=new SceneItem(PU_ORLR);
     PuItem1->setPos(631,586);
     scene->addItem(PuItem1);
-    QGraphicsPixmapItem* PuItem2=new QGraphicsPixmapItem();
-    PuItem2->setPixmap(pic5);
+    itemSceneList.append(PuItem1);
+    SceneItem* PuItem2=new SceneItem(PU_ORLR);
     PuItem2->setPos(649,710);
     scene->addItem(PuItem2);
-    QGraphicsPixmapItem* PuItem3=new QGraphicsPixmapItem();
-    PuItem3->setPixmap(pic5);
+    itemSceneList.append(PuItem2);
+    SceneItem* PuItem3=new SceneItem(PU_ORLR);
     PuItem3->setPos(740,834);
     scene->addItem(PuItem3);
+    itemSceneList.append(PuItem3);
 
     //------------------------------------------
     mainPosition.x = 0;
@@ -90,13 +100,9 @@ UPointer::UPointer(QString mainConfDir, QObject *parent) : QObject(parent), isEd
     animationTimer=new QTimer(this);
     connect(animationTimer, SIGNAL(timeout()), scene, SLOT(advance()));
     animationTimer->start(1000);
-
-    //------------------------------------------
-    //    MoveItem* item=new MoveItem();
-    //    item->setPos(947,563);
-    //    scene->addItem(item);
-    //    item->setZValue(1);
-    //------------------------------------------
+    isAirfieldAll=false;
+    isAirfieldOwn=false;
+    isAirfieldForeign=false;
 }
 GraphicsScene * UPointer::getScene() {
     return scene;
@@ -209,10 +215,15 @@ void UPointer::flight2(int num, flightRoute path)
         obj->setMoveNumber(moveNumber(last,next,2000));
         obj->setColor(getColor(path.OGP));
         scene->addItem(obj);
+        TargetNumber* tag=new TargetNumber(QString::number(path.targetNumber),f.x,f.y);
+        tag->setPos(last.x+3,last.y+13);
+        tag->setZValue(2);
+        scene->addItem(tag);
         path.count++;
         obj->setFlightRote(path);
         obj->setCount(path.count);
         connect(obj,&AirObject::signalFinish,this, &UPointer::flight2);
+        connect(obj,&AirObject::signalDelete,tag, &TargetNumber::deleteItem);
     }
 }
 
@@ -228,10 +239,15 @@ void UPointer::flight(flightRoute path)
         obj->setMoveNumber(moveNumber(last,path.airPoint.at(1),2000));
         obj->setColor(getColor(path.OGP));
         scene->addItem(obj);
+        TargetNumber* tag=new TargetNumber(QString::number(path.targetNumber),f.x,f.y);
+        tag->setPos(last.x+3,last.y+13);
+        tag->setZValue(2);
+        scene->addItem(tag);
         path.count++;
         obj->setFlightRote(path);
         obj->setCount(path.count);
         connect(obj,&AirObject::signalFinish,this, &UPointer::flight2);
+        connect(obj,&AirObject::signalDelete,tag, &TargetNumber::deleteItem);
     }
 }
 
@@ -303,7 +319,6 @@ iConfig UPointer::getConfig()
 void UPointer::drawAir()
 {
     for(auto el:trainingConf.airObject){
-       // drawPath(el);
         flight(el);
     }
 }
@@ -332,8 +347,8 @@ void UPointer::reLoad(){
         last.x = 0.0;
         last.y = 0.0;
         conf.lastPosition = last;
-//----------------------------------------
-// Create first flightRoute
+        //----------------------------------------
+        // Create first flightRoute
         iPoint i;
         i.x=10+967,i.y=10+603;
         iPoint j;
@@ -348,7 +363,7 @@ void UPointer::reLoad(){
         firstRoute.OGP=0;
         firstRoute.typeAirObj=0;
         conf.airObject.append(firstRoute);
-//-----------------------------------------
+        //-----------------------------------------
     }
 
 }
@@ -375,4 +390,48 @@ void UPointer::save() {
 void UPointer::setTrainingConf(iConfig conf)
 {
     this->trainingConf=conf;
+}
+
+void UPointer::setAirObjectConf(iConfig conf)
+{
+    for(auto &elem:this->conf.airObject)
+        this->conf.airObject.removeFirst();
+    for(auto &el:conf.airObject)
+        this->conf.airObject.append(el);
+}
+
+void UPointer::airfieldAll()
+{   isAirfieldAll=!isAirfieldAll;
+    for(auto &el: itemSceneList)
+        if(el->getType()==1||el->getType()==2)
+        { if(isAirfieldAll)
+                el->hide();
+            else
+                el->show();
+        }
+
+}
+
+void UPointer::airfieldOwn()
+{isAirfieldOwn=!isAirfieldOwn;
+    for(auto &el: itemSceneList)
+        if(el->getType()==OWN)
+        { if(isAirfieldOwn)
+                el->hide();
+            else
+                el->show();
+        }
+
+}
+
+void UPointer::airfieldForeign()
+{isAirfieldForeign=!isAirfieldForeign;
+    for(auto &el: itemSceneList)
+        if(el->getType()==FOREIGN)
+        { if(isAirfieldForeign)
+                el->hide();
+            else
+                el->show();
+        }
+
 }
