@@ -77,6 +77,26 @@ void GraphicsScene::setTypeAirObject(int i)
     path.typeAirObj=i;
 }
 
+void GraphicsScene::setSpeed(int speed)
+{
+    path.speed=speed;
+}
+
+void GraphicsScene::setHeightFly(int heightFly)
+{
+    path.heightFly=heightFly;
+}
+
+void GraphicsScene::setIndex(int index)
+{
+    path.index=index;
+}
+
+void GraphicsScene::setQuantity(int quantity)
+{
+    path.quantity=quantity;
+}
+
 flightRoute GraphicsScene::getPath()
 {   return path;
 }
@@ -100,10 +120,30 @@ void GraphicsScene::drawPath()
         addItem(item);
         item->setZValue(2);
         if(selectInNumberPathPoint==count++)
-                item->setColor(Qt::green);
+            item->setColor(Qt::green);
         moveItemInScene.append(item);
         drawLinePath();
     }
+}
+
+void GraphicsScene::drawPathAll()
+{
+    for(auto &el: conf.airObject){
+        setPath(el);
+        drawPath();
+//        for(auto &el1: el.airPoint){
+//            MoveItem* item=new MoveItem();
+//            item->setPos(el1.x,el1.y);
+//            addItem(item);
+//            moveItemInScene.append(item);
+//            //drawLinePath();
+//        }
+    }
+}
+
+void GraphicsScene::setConf(iConfig conf)
+{
+    this->conf=conf;
 }
 
 void GraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)

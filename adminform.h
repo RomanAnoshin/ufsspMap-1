@@ -30,6 +30,14 @@ private slots:
 
     void setTypeAirObject(int i);
 
+    void setSpeed(QString speed);
+
+    void setHeightFly(QString heightFly);
+
+    void setIndex(int index);
+
+    void setQuantity(QString quantity);
+
     void onDrawAirPoint(int i);
 
     void parseValueToInt(QString s);
@@ -74,6 +82,7 @@ private:
     int countTargetNumber;
     void installOGP();
     void installTypeAirObject();
+    void installIndex();
     void isActiveComboBox(bool isActive);
     void instalSettingsPath();
     void loadTabTraining();

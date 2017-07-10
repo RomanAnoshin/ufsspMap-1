@@ -1,7 +1,7 @@
 #include "airobject.h"
-#include <QRect>
 
-AirObject::AirObject(): QGraphicsItem()
+
+AirObject::AirObject(QObject *parent): QObject(parent), QGraphicsItem()
 {
     dx=2;
     dy=2;
@@ -9,6 +9,13 @@ AirObject::AirObject(): QGraphicsItem()
     count2=0;
     moveNumber=0;
     color=QColor(Qt::white);
+    visibility=true;
+    setOGP(0);
+    setSpeed(1000);
+    setHeightFly(100);
+    setIndex(0);
+    setTypeObject(0);
+    setQuantity(1);
 }
 
 AirObject::AirObject(float dx, float dy, qreal angle): AirObject()
@@ -30,6 +37,10 @@ AirObject::AirObject(float dx, float dy,qreal angle,int x, int y, int w, int h) 
     height = h;
 }
 
+AirObject::~AirObject()
+{
+}
+
 void AirObject::setMoveNumber(int i)
 {
     this->moveNumber=i;
@@ -43,7 +54,7 @@ QRectF AirObject::boundingRect() const
 void AirObject::advance(int phase)
 {   if(phase){
         if(count==moveNumber){
-            signalFinish(path.count, path);
+            signalFinish(path.count, path, visibility,this);
             signalDelete();
             delete this;
             return;
@@ -86,4 +97,79 @@ void AirObject::setCount(int i)
 void AirObject::setColor(QColor color)
 {
     this->color=color;
+}
+
+void AirObject::setOGP(int i)
+{
+    this->OGP=i;
+}
+
+int AirObject::getOGP()
+{
+    return OGP;
+}
+
+void AirObject::setSpeed(int speed)
+{
+    this->speed=speed;
+}
+
+int AirObject::getSpeed()
+{
+    return this->speed;
+}
+
+void AirObject::setHeightFly(int heightFly)
+{
+    this->heightFly=heightFly;
+}
+
+int AirObject::getHeightFly()
+{
+    return this->heightFly;
+}
+
+void AirObject::setIndex(int index)
+{
+    this->index=index;
+}
+
+int AirObject::getIndex()
+{
+    return this->index;
+}
+
+void AirObject::setTypeObject(int typeObject)
+{
+    this->typeObject=typeObject;
+}
+
+int AirObject::getTypeObject()
+{
+    return this->typeObject;
+}
+
+void AirObject::setQuantity(int quantity)
+{
+    this->quantity=quantity;
+}
+
+int AirObject::getQuantity()
+{
+    return this->quantity;
+}
+
+void AirObject::inVisibility()
+{
+    visibility=!visibility;
+    if(visibility)
+        show();
+    else
+        hide();
+}
+
+void AirObject::setVisibility(bool b)
+{
+    this->visibility=!b;
+    inVisibility();
 }

@@ -39,6 +39,10 @@ typedef struct flightRoute_str {
     qreal targetNumber;
     int OGP;
     int typeAirObj;
+    int speed;
+    int heightFly;
+    int index;
+    int quantity;
     int count;
 }flightRoute;
 

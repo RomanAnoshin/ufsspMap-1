@@ -7,6 +7,8 @@ TargetNumber::TargetNumber(QString number,float dx, float dy)
     this->dx=dx;
     this->dy=dy;
     count=0;
+    visibility=true;
+    OGP=0;
 }
 
 void TargetNumber::advance(int phase)
@@ -31,5 +33,31 @@ void TargetNumber::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
 
 void TargetNumber::deleteItem()
 {
+    deleteInList(this);
     delete this;
 }
+void TargetNumber::inVisibility()
+{
+    visibility=!visibility;
+    if(visibility)
+        show();
+    else
+        hide();
+}
+
+void TargetNumber::setVisibility(bool b)
+{
+    this->visibility=!b;
+    inVisibility();
+}
+
+void TargetNumber::setOGP(int i)
+{
+    this->OGP=i;
+}
+
+int TargetNumber::getOGP()
+{
+    return this->OGP;
+}
+

@@ -17,6 +17,10 @@ AdminForm::AdminForm(QWidget *parent) :
     connect(ui->numberPath, SIGNAL(activated(QString)),this, SLOT(parseValueToInt(QString)));
     connect(ui->OGP,SIGNAL(activated(int)),this,SLOT(setOGP(int)));
     connect(ui->typeAirObject,SIGNAL(activated(int)),this, SLOT(setTypeAirObject(int)));
+    connect(ui->IndexAirObj,SIGNAL(activated(int)),this,SLOT(setIndex(int)));
+    connect(ui->speedEdit,SIGNAL(textEdited(QString)),this,SLOT(setSpeed(QString)));
+    connect(ui->heightEdit,SIGNAL(textEdited(QString)),this,SLOT(setHeightFly(QString)));
+    connect(ui->quantityEdit,SIGNAL(textEdited(QString)),this,SLOT(setQuantity(QString)));
     connect(ui->numberPathPoint, SIGNAL(activated(int)),this, SLOT(onNumberPathPointSelect(int)));
 }
 
@@ -62,6 +66,7 @@ void AdminForm::setPointer(UPointer *up){
     countTargetNumber=upointer->getConfig().airObject.size();
     installOGP();
     installTypeAirObject();
+    installIndex();
     ui->numberPath->setCurrentIndex(0);
     loadTabTraining();
 }
@@ -87,6 +92,27 @@ void AdminForm::setOGP(int i)
 void AdminForm::setTypeAirObject(int i)
 {
     upointer->getScene()->setTypeAirObject(i);
+}
+
+void AdminForm::setSpeed(QString speed)
+{
+
+    upointer->getScene()->setSpeed(speed.toInt());
+}
+
+void AdminForm::setHeightFly(QString heightFly)
+{
+    upointer->getScene()->setHeightFly(heightFly.toInt());
+}
+
+void AdminForm::setIndex(int index)
+{
+    upointer->getScene()->setIndex(index);
+}
+
+void AdminForm::setQuantity(QString quantity)
+{
+    upointer->getScene()->setQuantity(quantity.toInt());
 }
 
 void AdminForm::on_addLine_clicked()
@@ -131,6 +157,7 @@ void AdminForm::on_newPath_clicked()
     newPath.targetNumber=++countTargetNumber;
     newPath.OGP=2;
     newPath.typeAirObj=0;
+    newPath.index=0;
     upointer->getScene()->setIsCreatePath(true);
     upointer->getScene()->setPath(newPath);
     upointer->addConfAir(newPath);
@@ -139,12 +166,15 @@ void AdminForm::on_newPath_clicked()
     ui->numberPath->setCurrentIndex(newPath.targetNumber-1);
     ui->typeAirObject->setCurrentIndex(path.typeAirObj);
     ui->OGP->setCurrentIndex(path.OGP);
+    ui->IndexAirObj->setCurrentIndex(path.index);
+    ui->speedEdit->setText(QString::number(path.speed));
+    ui->heightEdit->setText(QString::number(path.heightFly));
+    ui->quantityEdit->setText(QString::number(path.quantity));
     ui->numberPathPoint->clear();
 }
 
 void AdminForm::on_deletePath_clicked()
 {
-    //upointer->drawAir();
     int i=ui->numberPathPoint->currentIndex();
     path.airPoint.removeAt(i);
     upointer->getScene()->deleteSceneItem();
@@ -158,10 +188,11 @@ void AdminForm::on_deletePath_clicked()
 }
 
 void AdminForm::on_saveNewPath_clicked()
-{    path=upointer->getScene()->getPath();
-     if(!path.airPoint.isEmpty())
-         upointer->reWritePath(path);
-     upointer->save();
+{
+    path=upointer->getScene()->getPath();
+    if(!path.airPoint.isEmpty())
+        upointer->reWritePath(path);
+    upointer->save();
 }
 
 void AdminForm::installOGP()
@@ -175,6 +206,18 @@ void AdminForm::installTypeAirObject()
     ui->typeAirObject->addItem("ИСТРЕБИТЕЛЬ",1);
     ui->typeAirObject->addItem("БОМБАРДИРОВЩИК",2);
     ui->typeAirObject->addItem("ШТУРМОВИК",3);
+}
+
+void AdminForm::installIndex()
+{
+    ui->IndexAirObj->addItem("ИВО не определен",1);
+    ui->IndexAirObj->addItem("Воздушный противник",2);
+    ui->IndexAirObj->addItem("Пост. актив. помех",3);
+    ui->IndexAirObj->addItem("Заявочный самолет",4);
+    ui->IndexAirObj->addItem("Самолет НРП",5);
+    ui->IndexAirObj->addItem("Контрольный самолет",6);
+    ui->IndexAirObj->addItem("Сам. выполняющий БЗ",7);
+    ui->IndexAirObj->addItem("Индекс не установлен",8);
 }
 
 void AdminForm::isActiveComboBox(bool isActive)
@@ -202,14 +245,15 @@ void AdminForm::isActiveComboBox(bool isActive)
 
 
 void AdminForm::onDrawAirPoint(int i)
-{
-    if(i!=2){
-        upointer->getScene()->setIsCreatePath(false);
-        upointer->getScene()->deleteSceneItem();
-    }
-    if(i==3){
-        loadTabTraining();
-    }
+{       upointer->getScene()->deleteSceneItem();
+        if(i!=2){
+            upointer->getScene()->setIsCreatePath(false);
+            upointer->getScene()->deleteSceneItem();
+        }
+        if(i==3){
+            loadTabTraining();
+            upointer->getScene()->drawPathAll();
+        }
 }
 
 void AdminForm::parseValueToInt(QString s)
@@ -233,6 +277,10 @@ void AdminForm::instalSettingsPath()
     }
     ui->OGP->setCurrentIndex(path.OGP);
     ui->typeAirObject->setCurrentIndex(path.typeAirObj);
+    ui->IndexAirObj->setCurrentIndex(path.index);
+    ui->speedEdit->setText(QString::number(path.speed));
+    ui->heightEdit->setText(QString::number(path.heightFly));
+    ui->quantityEdit->setText(QString::number(path.quantity));
 }
 
 void AdminForm::loadTabTraining()
@@ -253,7 +301,11 @@ void AdminForm::on_addItem_clicked()
             (el.targetNumber==myPath.targetNumber)?b=b&&false:b=b&&true;
         if(b){
             ui->listWidgetSecond->addItem(QString::number(myPath.targetNumber));
-            secondListConfig.airObject.append(myPath);}}
+            secondListConfig.airObject.append(myPath);
+            upointer->getScene()->setConf(secondListConfig);
+            upointer->getScene()->deleteSceneItem();
+            upointer->getScene()->drawPathAll();
+        }}
 }
 
 void AdminForm::on_removeItem_clicked()
@@ -262,6 +314,9 @@ void AdminForm::on_removeItem_clicked()
     ui->listWidgetSecond->clear();
     for(auto &el:secondListConfig.airObject)
         ui->listWidgetSecond->addItem(QString::number(el.targetNumber));
+    upointer->getScene()->setConf(secondListConfig);
+    upointer->getScene()->deleteSceneItem();
+    upointer->getScene()->drawPathAll();
 }
 
 void AdminForm::on_addAll_clicked()
@@ -270,19 +325,26 @@ void AdminForm::on_addAll_clicked()
     secondListConfig.airObject=upointer->getConfig().airObject;
     for(auto &el:secondListConfig.airObject)
         ui->listWidgetSecond->addItem(QString::number(el.targetNumber));
+    upointer->getScene()->setConf(secondListConfig);
+    upointer->getScene()->deleteSceneItem();
+    upointer->getScene()->drawPathAll();
 }
 
 void AdminForm::on_removeAll_clicked()
 {
     ui->listWidgetSecond->clear();
     secondListConfig.airObject.clear();
+    upointer->getScene()->setConf(secondListConfig);
+    upointer->getScene()->deleteSceneItem();
+    upointer->getScene()->drawPathAll();
 }
 
 void AdminForm::on_play_clicked()
-{    //   upointer->getScene()->clear();
+{    //сделать что бы при нажимании с экрана проподали пути и перезапускался налет
     upointer->setTrainingConf(secondListConfig);
     upointer->drawAir();
 }
+
 
 void AdminForm::on_saveFlying_clicked()
 {

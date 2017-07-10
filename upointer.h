@@ -20,11 +20,10 @@
 
 #include "graphicsscene.h"
 #include "scenetypes.h"
-#include "airobject.h"
 #include "moveitem.h"
 #include "sceneitem.h"
 #include "targetnumber.h"
-
+#include "airobject.h"
 
 static float const PI=3.14159265358979323846;
 
@@ -50,17 +49,19 @@ public:
     void save();
     void setTrainingConf(iConfig conf);
     void setAirObjectConf(iConfig conf);
- //   void reLoad();
+    void drawPath(flightRoute path);
+
 
 signals:   
 public slots:
+ void showAirForeign();
+ void deleteTargetNumberInList(TargetNumber* tn);
  void airfieldAll();
  void airfieldOwn();
  void airfieldForeign();
- void flight2(int num, flightRoute path);
+ void flight2(int num, flightRoute path, bool b, AirObject* ao);
 private:
     fPoint calcDelta(iPoint begin,iPoint end, float speed);
-    void drawPath(flightRoute path);
     flightRoute p;
     void flight(flightRoute path);
     qreal left;
@@ -90,6 +91,8 @@ private:
     iDataImages *di;
     QColor getColor(int i);
     QList <SceneItem*> itemSceneList;
+    QList <AirObject*> itemAirObjectList;
+    QList <TargetNumber*> itemTargetNumberList;
     bool isAirfieldAll;
     bool isAirfieldOwn;
     bool isAirfieldForeign;

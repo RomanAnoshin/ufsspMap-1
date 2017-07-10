@@ -31,12 +31,14 @@ public slots:
 private slots:
     void on_btnRG_clicked();
     void setDateTime();
+
 private:
     Ui::MainMap *ui;
     UPointer *upointer;
     AdminForm *admin;
     void setSubButtonStYle();
     QMenu * createStaticMenu();
+    QMenu *createSelParMenu();
 };
 
 #endif // MAINMAP_H

@@ -24,10 +24,16 @@ public:
     void setPath(flightRoute path);
     void setOGP(int i);
     void setTypeAirObject(int i);
+    void setSpeed(int speed);
+    void setHeightFly(int heightFly);
+    void setIndex(int index);
+    void setQuantity(int quantity);
     flightRoute getPath();
     void deleteSceneItem();
     void drawPath();
+    void drawPathAll();
     int selectInNumberPathPoint;
+    void setConf(iConfig conf);
 
 private:
         QList<MoveItem*>moveItemInScene;
@@ -35,6 +41,7 @@ private:
         flightRoute path;
         bool isCreatePath;
         bool isCreate;
+        iConfig conf;
 
 signals:
     //сигнал для передачи положения курсора

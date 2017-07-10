@@ -1,7 +1,4 @@
 #include "upointer.h"
-#include "iostream"
-
-
 
 UPointer::UPointer(QString mainConfDir, QObject *parent) : QObject(parent), isEditLine(false), isEditImg(false)
 {
@@ -13,7 +10,7 @@ UPointer::UPointer(QString mainConfDir, QObject *parent) : QObject(parent), isEd
     imgWidth = pic.width();
     imgHeight = pic.height();
     scene->addPixmap(pic);
-    //-----------------------------------------
+    //-------------------------------------------
     //------------foreign------------------------
     SceneItem* foreignItem=new SceneItem(FOREIGN);
     foreignItem->setPos(519-10,615-10);
@@ -92,14 +89,13 @@ UPointer::UPointer(QString mainConfDir, QObject *parent) : QObject(parent), isEd
     PuItem3->setPos(740,834);
     scene->addItem(PuItem3);
     itemSceneList.append(PuItem3);
-
     //------------------------------------------
     mainPosition.x = 0;
     mainPosition.y = 0;
     // создание таймера для анимации воздушных целей
     animationTimer=new QTimer(this);
     connect(animationTimer, SIGNAL(timeout()), scene, SLOT(advance()));
-    animationTimer->start(1000);
+    animationTimer->start(300);
     isAirfieldAll=false;
     isAirfieldOwn=false;
     isAirfieldForeign=false;
@@ -201,29 +197,42 @@ fPoint UPointer::calcDelta(iPoint begin, iPoint end,float speed)
 
 void UPointer::drawPath(flightRoute path)
 {
-    for(auto &el:path.airPoint)
-        scene->addEllipse(el.x,el.y,5,5,QPen(Qt::black),QBrush(Qt::green));
+    for(auto &el: trainingConf.airObject)
+    {for(auto &el2: el.airPoint)
+            scene->addEllipse(el2.x,el2.y,5,5,QPen(Qt::black),QBrush(Qt::green));
+    }
 }
 
-void UPointer::flight2(int num, flightRoute path)
-{      if(p.airPoint.size()>(num)){
+void UPointer::flight2(int num, flightRoute path, bool b,AirObject* ao)
+{
+    itemAirObjectList.removeOne(ao);
+    if(path.airPoint.size()>(num)){
         iPoint last=path.airPoint.at(num-1);
         iPoint next=path.airPoint.at(num);
         fPoint f=calcDelta(last,next,2000);
         AirObject *obj=new AirObject(f.x,f.y,calcAngle(last,next));
+        obj->setVisibility(b);
         obj->setPos(last.x+3,last.y+3);
         obj->setMoveNumber(moveNumber(last,next,2000));
         obj->setColor(getColor(path.OGP));
         scene->addItem(obj);
+        //-------------------
+        obj->setOGP(path.OGP);
+        itemAirObjectList.append(obj);
+        //-------------------
         TargetNumber* tag=new TargetNumber(QString::number(path.targetNumber),f.x,f.y);
         tag->setPos(last.x+3,last.y+13);
         tag->setZValue(2);
+        tag->setOGP(obj->getOGP());
+        tag->setVisibility(b);
         scene->addItem(tag);
+        itemTargetNumberList.append(tag);
         path.count++;
         obj->setFlightRote(path);
         obj->setCount(path.count);
         connect(obj,&AirObject::signalFinish,this, &UPointer::flight2);
         connect(obj,&AirObject::signalDelete,tag, &TargetNumber::deleteItem);
+        connect(tag, SIGNAL(deleteInList(TargetNumber*)),this, SLOT(deleteTargetNumberInList(TargetNumber*)) );
     }
 }
 
@@ -239,15 +248,20 @@ void UPointer::flight(flightRoute path)
         obj->setMoveNumber(moveNumber(last,path.airPoint.at(1),2000));
         obj->setColor(getColor(path.OGP));
         scene->addItem(obj);
+        obj->setOGP(path.OGP);
+        itemAirObjectList.append(obj);
         TargetNumber* tag=new TargetNumber(QString::number(path.targetNumber),f.x,f.y);
         tag->setPos(last.x+3,last.y+13);
         tag->setZValue(2);
+        tag->setOGP(obj->getOGP());
+        itemTargetNumberList.append(tag);
         scene->addItem(tag);
         path.count++;
         obj->setFlightRote(path);
         obj->setCount(path.count);
         connect(obj,&AirObject::signalFinish,this, &UPointer::flight2);
         connect(obj,&AirObject::signalDelete,tag, &TargetNumber::deleteItem);
+        connect(tag, SIGNAL(deleteInList(TargetNumber*)),this, SLOT(deleteTargetNumberInList(TargetNumber*)) );
     }
 }
 
@@ -433,5 +447,22 @@ void UPointer::airfieldForeign()
             else
                 el->show();
         }
+}
 
+
+void UPointer::showAirForeign()
+{
+    for(auto &el: itemAirObjectList){
+        if(el->getOGP()!=1)
+            el->inVisibility();
+    }
+    for(auto &el: itemTargetNumberList){
+        if(el->getOGP()!=1)
+            el->inVisibility();
+    }
+}
+
+void UPointer::deleteTargetNumberInList(TargetNumber* tn)
+{
+    itemTargetNumberList.removeOne(tn);
 }

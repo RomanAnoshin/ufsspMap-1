@@ -77,6 +77,10 @@ QDataStream &operator>>(QDataStream &out,flightRoute &str)
     out >> str.OGP;
     out >> str.typeAirObj;
     out >> str.count;
+    out >> str.index;
+    out >> str.speed;
+    out >> str.heightFly;
+    out >> str.quantity;
     return out;
 }
 QDataStream &operator<<(QDataStream &out, const flightRoute &str)
@@ -86,6 +90,10 @@ QDataStream &operator<<(QDataStream &out, const flightRoute &str)
     out << str.OGP;
     out << str.typeAirObj;
     out << str.count;
+    out << str.index;
+    out << str.speed;
+    out << str.heightFly;
+    out << str.quantity;
     return out;
 }
 QDataStream &operator>>(QDataStream &out, iGroup &str)
