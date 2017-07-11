@@ -27,7 +27,6 @@ void GraphicsScene::drawLinePath()
             line->setZValue(1);
             last=el;
         }}
-
 }
 
 
@@ -131,13 +130,6 @@ void GraphicsScene::drawPathAll()
     for(auto &el: conf.airObject){
         setPath(el);
         drawPath();
-//        for(auto &el1: el.airPoint){
-//            MoveItem* item=new MoveItem();
-//            item->setPos(el1.x,el1.y);
-//            addItem(item);
-//            moveItemInScene.append(item);
-//            //drawLinePath();
-//        }
     }
 }
 

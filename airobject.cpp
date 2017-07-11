@@ -48,7 +48,7 @@ void AirObject::setMoveNumber(int i)
 
 QRectF AirObject::boundingRect() const
 {
-    return QRectF(posX,posY,width,height);   // Ограничиваем область, в которой лежит треугольник
+    return QRectF(posX,posY,width,height);   // Ограничиваем область, в которой воздушный объект
 }
 
 void AirObject::advance(int phase)
@@ -56,12 +56,12 @@ void AirObject::advance(int phase)
         if(count==moveNumber){
             signalFinish(path.count, path, visibility,this);
             signalDelete();
+
             delete this;
             return;
         }
         if(((++count)%5)==0){
             moveBy(dx*10,dy*10);
-            //--------------------------------------
         }
     }}
 
@@ -97,6 +97,11 @@ void AirObject::setCount(int i)
 void AirObject::setColor(QColor color)
 {
     this->color=color;
+}
+
+QColor AirObject::getColor()
+{
+    return this->color;
 }
 
 void AirObject::setOGP(int i)
@@ -172,4 +177,19 @@ void AirObject::setVisibility(bool b)
 {
     this->visibility=!b;
     inVisibility();
+}
+
+float AirObject::getDx()
+{
+    return this->dx;
+}
+
+float AirObject::getDy()
+{
+    return this->dy;
+}
+
+bool AirObject::getVisibility()
+{
+    return this->visibility;
 }

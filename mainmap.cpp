@@ -31,6 +31,7 @@ MainMap::MainMap(QWidget *parent) :
 
     ui->pushButtonStatic->setMenu(createStaticMenu());
     ui->pushSelPar->setMenu(createSelParMenu());
+    ui->pushDisplayButton->setMenu(createDisplayMenu());
 }
 void MainMap::resizeEvent(QResizeEvent* event) {
     Q_UNUSED(event);
@@ -89,9 +90,9 @@ QMenu * MainMap::createStaticMenu()
     QAction* third=new QAction(trUtf8("Сетка"), this);
     QAction* fourth=new QAction(trUtf8("Карта"), this);
     QAction* fifth=new QAction(trUtf8("Полосы"), this);
-    QAction* f6=new QAction(trUtf8("Трассы"), this);
-    QAction* f7=new QAction(trUtf8("Гран. ответ."), this);
-    QAction* f8=new QAction(trUtf8("зоны и рубежи"), this);
+    QAction* sixth=new QAction(trUtf8("Трассы"), this);
+    QAction* seventh=new QAction(trUtf8("Гран. ответ."), this);
+    QAction* eight=new QAction(trUtf8("зоны и рубежи"), this);
     menu->addMenu(first);
     menu->addMenu(second);
     second->addAction("Все аэродромы",upointer,SLOT(airfieldAll()));
@@ -100,9 +101,9 @@ QMenu * MainMap::createStaticMenu()
     menu->addAction(third);
     menu->addAction(fourth);
     menu->addAction(fifth);
-    menu->addAction(f6);
-    menu->addAction(f7);
-    menu->addAction(f8);
+    menu->addAction(sixth);
+    menu->addAction(seventh);
+    menu->addAction(eight);
     return menu;
 }
 QMenu * MainMap::createSelParMenu()
@@ -112,10 +113,10 @@ QMenu * MainMap::createSelParMenu()
     QAction* third=new QAction(trUtf8("По скорости"), this);
     QAction* fourth=new QAction(trUtf8("По высоте"), this);
     QAction* fifth=new QAction(trUtf8("Тренажные"), this);
-    QAction* f6=new QAction(trUtf8("Рефльные"), this);
-    QAction* f7=new QAction(trUtf8("Головные"), this);
-    QAction* f8=new QAction(trUtf8("Без этала"), this);
-    QAction* f9=new QAction(trUtf8("Опасн. близ"), this);
+    QAction* sixth=new QAction(trUtf8("Рефльные"), this);
+    QAction* seventh=new QAction(trUtf8("Головные"), this);
+    QAction* eight=new QAction(trUtf8("Без этала"), this);
+    QAction* ninth=new QAction(trUtf8("Опасн. близ"), this);
     menu->addMenu(first);
     menu->addMenu(second);
     first->addAction("Свои");
@@ -124,9 +125,41 @@ QMenu * MainMap::createSelParMenu()
     menu->addAction(third);
     menu->addAction(fourth);
     menu->addAction(fifth);
-    menu->addAction(f6);
-    menu->addAction(f7);
-    menu->addAction(f8);
-    menu->addAction(f9);
+    menu->addAction(sixth);
+    menu->addAction(seventh);
+    menu->addAction(eight);
+    menu->addAction(ninth);
     return menu;
+}
+
+QMenu *MainMap::createDisplayMenu()
+{
+     QMenu* menu=new QMenu(this);
+     QMenu* first=new QMenu(trUtf8("Предыстория"), this);
+     QMenu* second=new QMenu(trUtf8("Вызов Лупы"), this);
+     QMenu* third=new QMenu(trUtf8("Форм. по ВО"), this);
+     QAction* fourth=new QAction(trUtf8("Справки ХАР"), this);
+     QAction* fifth=new QAction(trUtf8("Обмен"), this);
+     QAction* sixth=new QAction(trUtf8("Пеленги"), this);
+     QAction* seventh=new QAction(trUtf8("Спец.Форм"), this);
+     QAction* eight=new QAction(trUtf8("Коорд. мар."), this);
+     menu->addMenu(first);
+     menu->addMenu(second);
+     menu->addMenu(third);
+     third->addAction("Местополож ВО");
+     third->addAction("NE(NBO)");
+     third->addAction("ИВО,ТВО,NE(NBO)");
+     third->addAction("ИВО,ТВО,NE(NBO),H,V",upointer,SLOT(drawRefefenceForm()));
+     third->addAction("Отобразить NBO");
+     menu->addAction(fourth);
+     menu->addAction(fifth);
+     menu->addAction(sixth);
+     menu->addAction(seventh);
+     menu->addAction(eight);
+     return menu;
+}
+
+void MainMap::on_pushButton_34_clicked()
+{
+    upointer->drawRefefenceForm();
 }

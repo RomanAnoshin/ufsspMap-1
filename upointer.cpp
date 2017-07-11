@@ -95,10 +95,11 @@ UPointer::UPointer(QString mainConfDir, QObject *parent) : QObject(parent), isEd
     // создание таймера для анимации воздушных целей
     animationTimer=new QTimer(this);
     connect(animationTimer, SIGNAL(timeout()), scene, SLOT(advance()));
-    animationTimer->start(300);
+    animationTimer->start(400);
     isAirfieldAll=false;
     isAirfieldOwn=false;
     isAirfieldForeign=false;
+    isReferenceDisplay=false;
 }
 GraphicsScene * UPointer::getScene() {
     return scene;
@@ -203,6 +204,13 @@ void UPointer::drawPath(flightRoute path)
     }
 }
 
+void UPointer::drawRefefenceForm()
+{   isReferenceDisplay=!isReferenceDisplay;
+    for(auto &el: itemReferenceList){
+            el->visibility(isReferenceDisplay);
+    }
+}
+
 void UPointer::flight2(int num, flightRoute path, bool b,AirObject* ao)
 {
     itemAirObjectList.removeOne(ao);
@@ -215,6 +223,11 @@ void UPointer::flight2(int num, flightRoute path, bool b,AirObject* ao)
         obj->setPos(last.x+3,last.y+3);
         obj->setMoveNumber(moveNumber(last,next,2000));
         obj->setColor(getColor(path.OGP));
+        obj->setSpeed(path.speed);
+        obj->setHeightFly(path.heightFly);
+        obj->setIndex(path.index);
+        obj->setTypeObject(path.typeAirObj);
+        obj->setQuantity(path.quantity);
         scene->addItem(obj);
         //-------------------
         obj->setOGP(path.OGP);
@@ -226,13 +239,20 @@ void UPointer::flight2(int num, flightRoute path, bool b,AirObject* ao)
         tag->setOGP(obj->getOGP());
         tag->setVisibility(b);
         scene->addItem(tag);
+
         itemTargetNumberList.append(tag);
+        ReferenceAirForm* raf=new ReferenceAirForm(obj, path.targetNumber,isReferenceDisplay);
+        raf->setPos(last.x+20,last.y-10);
+        scene->addItem(raf);
+        itemReferenceList.append(raf);
         path.count++;
         obj->setFlightRote(path);
         obj->setCount(path.count);
         connect(obj,&AirObject::signalFinish,this, &UPointer::flight2);
         connect(obj,&AirObject::signalDelete,tag, &TargetNumber::deleteItem);
-        connect(tag, SIGNAL(deleteInList(TargetNumber*)),this, SLOT(deleteTargetNumberInList(TargetNumber*)) );
+        connect(tag, SIGNAL(deleteInList(TargetNumber*)),this, SLOT(deleteTargetNumberInList(TargetNumber*)));
+        connect(obj,&AirObject::signalDelete,raf, &ReferenceAirForm::deleteItem);
+        connect(raf, SIGNAL(deleteInList(ReferenceAirForm*)),this, SLOT(deleteReferencForm(ReferenceAirForm*)));
     }
 }
 
@@ -249,6 +269,11 @@ void UPointer::flight(flightRoute path)
         obj->setColor(getColor(path.OGP));
         scene->addItem(obj);
         obj->setOGP(path.OGP);
+        obj->setSpeed(path.speed);
+        obj->setHeightFly(path.heightFly);
+        obj->setIndex(path.index);
+        obj->setTypeObject(path.typeAirObj);
+        obj->setQuantity(path.quantity);
         itemAirObjectList.append(obj);
         TargetNumber* tag=new TargetNumber(QString::number(path.targetNumber),f.x,f.y);
         tag->setPos(last.x+3,last.y+13);
@@ -256,12 +281,21 @@ void UPointer::flight(flightRoute path)
         tag->setOGP(obj->getOGP());
         itemTargetNumberList.append(tag);
         scene->addItem(tag);
+
+        ReferenceAirForm* raf=new ReferenceAirForm(obj, path.targetNumber,isReferenceDisplay);
+        raf->setPos(last.x+20,last.y-10);
+        scene->addItem(raf);
+        raf->setZValue(5);
+        itemReferenceList.append(raf);
+
         path.count++;
         obj->setFlightRote(path);
         obj->setCount(path.count);
         connect(obj,&AirObject::signalFinish,this, &UPointer::flight2);
         connect(obj,&AirObject::signalDelete,tag, &TargetNumber::deleteItem);
-        connect(tag, SIGNAL(deleteInList(TargetNumber*)),this, SLOT(deleteTargetNumberInList(TargetNumber*)) );
+        connect(tag, SIGNAL(deleteInList(TargetNumber*)),this, SLOT(deleteTargetNumberInList(TargetNumber*)));
+        connect(obj,&AirObject::signalDelete,raf, &ReferenceAirForm::deleteItem);
+        connect(raf, SIGNAL(deleteInList(ReferenceAirForm*)),this, SLOT(deleteReferencForm(ReferenceAirForm*)));
     }
 }
 
@@ -460,9 +494,18 @@ void UPointer::showAirForeign()
         if(el->getOGP()!=1)
             el->inVisibility();
     }
+    for(auto &el: itemReferenceList){
+        if(el->getOGP()!=1)
+            el->visibility2();
+    }
 }
 
 void UPointer::deleteTargetNumberInList(TargetNumber* tn)
 {
     itemTargetNumberList.removeOne(tn);
+}
+
+void UPointer::deleteReferencForm(ReferenceAirForm *raf)
+{
+    itemReferenceList.removeOne(raf);
 }

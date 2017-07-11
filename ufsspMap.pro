@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     graphicsscene.cpp \
     moveitem.cpp \
     sceneitem.cpp \
-    targetnumber.cpp
+    targetnumber.cpp \
+    referenceairform.cpp
 
 HEADERS  += mainmap.h \
     scenetypes.h \
@@ -31,7 +32,8 @@ HEADERS  += mainmap.h \
     graphicsscene.h \
     moveitem.h \
     sceneitem.h \
-    targetnumber.h
+    targetnumber.h \
+    referenceairform.h
 
 FORMS    += mainmap.ui \
     adminform.ui

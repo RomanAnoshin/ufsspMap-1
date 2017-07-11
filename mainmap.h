@@ -31,6 +31,7 @@ public slots:
 private slots:
     void on_btnRG_clicked();
     void setDateTime();
+    void on_pushButton_34_clicked();
 
 private:
     Ui::MainMap *ui;
@@ -39,6 +40,7 @@ private:
     void setSubButtonStYle();
     QMenu * createStaticMenu();
     QMenu *createSelParMenu();
+    QMenu *createDisplayMenu();
 };
 
 #endif // MAINMAP_H

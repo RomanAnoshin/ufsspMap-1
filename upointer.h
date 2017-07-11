@@ -24,6 +24,7 @@
 #include "sceneitem.h"
 #include "targetnumber.h"
 #include "airobject.h"
+#include "referenceairform.h"
 
 static float const PI=3.14159265358979323846;
 
@@ -51,15 +52,17 @@ public:
     void setAirObjectConf(iConfig conf);
     void drawPath(flightRoute path);
 
-
 signals:   
 public slots:
  void showAirForeign();
  void deleteTargetNumberInList(TargetNumber* tn);
+ void deleteReferencForm(ReferenceAirForm* raf);
  void airfieldAll();
  void airfieldOwn();
  void airfieldForeign();
  void flight2(int num, flightRoute path, bool b, AirObject* ao);
+ void drawRefefenceForm();
+
 private:
     fPoint calcDelta(iPoint begin,iPoint end, float speed);
     flightRoute p;
@@ -93,6 +96,8 @@ private:
     QList <SceneItem*> itemSceneList;
     QList <AirObject*> itemAirObjectList;
     QList <TargetNumber*> itemTargetNumberList;
+    QList <ReferenceAirForm*> itemReferenceList;
+    bool isReferenceDisplay;
     bool isAirfieldAll;
     bool isAirfieldOwn;
     bool isAirfieldForeign;

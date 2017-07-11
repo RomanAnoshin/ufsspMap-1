@@ -25,6 +25,7 @@ public:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     void setCount(int i);
     void setColor(QColor color);
+    QColor getColor();
     void setOGP(int i);
     int getOGP();
     void setSpeed(int speed);
@@ -39,9 +40,13 @@ public:
     int getQuantity();
     void inVisibility();
     void setVisibility(bool b);
+    float getDx();
+    float getDy();
+    bool getVisibility();
 signals:
     void signalFinish(int count, flightRoute path, bool b, AirObject* ao);
     void signalDelete();
+
 
 protected:
     QRectF boundingRect() const;
@@ -62,7 +67,6 @@ private:
     int index;
     int typeObject;
     int quantity;
-
     bool visibility;
 };
 
