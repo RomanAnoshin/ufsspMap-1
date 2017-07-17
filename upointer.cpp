@@ -95,11 +95,13 @@ UPointer::UPointer(QString mainConfDir, QObject *parent) : QObject(parent), isEd
     // создание таймера для анимации воздушных целей
     animationTimer=new QTimer(this);
     connect(animationTimer, SIGNAL(timeout()), scene, SLOT(advance()));
-    animationTimer->start(400);
+    animationTimer->start(300);
     isAirfieldAll=false;
     isAirfieldOwn=false;
     isAirfieldForeign=false;
     isReferenceDisplay=false;
+    qTimeRef=new QTimer(this);
+    connect(qTimeRef,SIGNAL(timeout()),this,SLOT(timeOutRefSlot()));
 }
 GraphicsScene * UPointer::getScene() {
     return scene;
@@ -205,9 +207,12 @@ void UPointer::drawPath(flightRoute path)
 }
 
 void UPointer::drawRefefenceForm()
-{   isReferenceDisplay=!isReferenceDisplay;
+{
+    qTimeRef->stop();
+    qTimeRef->start(30000);//30 seconds
+    isReferenceDisplay=true;
     for(auto &el: itemReferenceList){
-            el->visibility(isReferenceDisplay);
+            el->visibility(true);
     }
 }
 
@@ -488,16 +493,39 @@ void UPointer::showAirForeign()
 {
     for(auto &el: itemAirObjectList){
         if(el->getOGP()!=1)
-            el->inVisibility();
+            el->setVisibility(false);
     }
     for(auto &el: itemTargetNumberList){
         if(el->getOGP()!=1)
-            el->inVisibility();
+            el->setVisibility(false);
     }
     for(auto &el: itemReferenceList){
         if(el->getOGP()!=1)
-            el->visibility2();
+            el->visibility2(false);
     }
+}
+
+void UPointer::selectionReset()
+{
+    for(auto &el: itemAirObjectList){
+            el->setVisibility(true);
+    }
+    for(auto &el: itemTargetNumberList){
+            el->setVisibility(true);
+    }
+    for(auto &el: itemReferenceList){
+            el->visibility2(true);
+    }
+
+}
+
+void UPointer::timeOutRefSlot()
+{
+    qTimeRef->stop();
+    isReferenceDisplay=false;
+    for(auto &el: itemReferenceList){
+            el->visibility(isReferenceDisplay);
+}
 }
 
 void UPointer::deleteTargetNumberInList(TargetNumber* tn)

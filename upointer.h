@@ -62,6 +62,10 @@ public slots:
  void airfieldForeign();
  void flight2(int num, flightRoute path, bool b, AirObject* ao);
  void drawRefefenceForm();
+ //------------------------------
+ void selectionReset();
+ //------------------------------
+ void timeOutRefSlot();
 
 private:
     fPoint calcDelta(iPoint begin,iPoint end, float speed);
@@ -97,10 +101,11 @@ private:
     QList <AirObject*> itemAirObjectList;
     QList <TargetNumber*> itemTargetNumberList;
     QList <ReferenceAirForm*> itemReferenceList;
-    bool isReferenceDisplay;
     bool isAirfieldAll;
     bool isAirfieldOwn;
     bool isAirfieldForeign;
+    bool isReferenceDisplay;
+    QTimer* qTimeRef;
 };
 
 #endif // UPOINTER_H

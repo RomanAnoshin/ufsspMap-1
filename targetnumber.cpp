@@ -38,7 +38,6 @@ void TargetNumber::deleteItem()
 }
 void TargetNumber::inVisibility()
 {
-    visibility=!visibility;
     if(visibility)
         show();
     else
@@ -47,7 +46,7 @@ void TargetNumber::inVisibility()
 
 void TargetNumber::setVisibility(bool b)
 {
-    this->visibility=!b;
+    this->visibility=b;
     inVisibility();
 }
 

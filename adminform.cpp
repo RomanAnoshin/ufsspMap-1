@@ -203,9 +203,10 @@ void AdminForm::installOGP()
 }
 void AdminForm::installTypeAirObject()
 {
-    ui->typeAirObject->addItem("ИСТРЕБИТЕЛЬ",1);
-    ui->typeAirObject->addItem("БОМБАРДИРОВЩИК",2);
-    ui->typeAirObject->addItem("ШТУРМОВИК",3);
+    ui->typeAirObject->addItem("Самолет",1);
+    ui->typeAirObject->addItem("Ракета",2);
+    ui->typeAirObject->addItem("Вертолет",3);
+    ui->typeAirObject->addItem("Космический аппарат",4);
 }
 
 void AdminForm::installIndex()

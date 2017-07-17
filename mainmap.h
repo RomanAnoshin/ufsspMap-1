@@ -31,16 +31,31 @@ public slots:
 private slots:
     void on_btnRG_clicked();
     void setDateTime();
-    void on_pushButton_34_clicked();
+    void on_pushButton_31_clicked();
+
+    void testSlot(QString s);
+    void focusSlot();
 
 private:
     Ui::MainMap *ui;
     UPointer *upointer;
     AdminForm *admin;
     void setSubButtonStYle();
-    QMenu * createStaticMenu();
+    QMenu *createStaticMenu();
     QMenu *createSelParMenu();
     QMenu *createDisplayMenu();
+    //------------------------
+    // поменять имя
+    QMenu *createResetMenu();
+    //------------------------
+    QTimer *focusTimer;
+    bool word1;
+    bool word2;
+    bool word3;
+    bool wordSelection;
+    bool wordRef1;
+    bool wordRef2;
+    void parseMyString(QString s);
 };
 
 #endif // MAINMAP_H

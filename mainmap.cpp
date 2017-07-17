@@ -20,8 +20,9 @@ MainMap::MainMap(QWidget *parent) :
     upointer->reWrite(ui->graphicsView->width(),ui->graphicsView->height());
     admin = new AdminForm();
     admin->setPointer(upointer);
-    // отображение положения курсора на сцене в Дисплее
-    connect(upointer->getScene(), SIGNAL(signalCursor(QPointF)), this,SLOT(slotDisplay(QPointF)));
+    //-----------------------------------------------------------------------------
+    connect(ui->testEdit,SIGNAL(textEdited(QString)),this,SLOT(testSlot(QString)));
+    //-----------------------------------------------------------------------------
     ui->graphicsView->setMouseTracking(true);
     this->ui->label_2->setStyleSheet("background-color: rgb(56, 235,229)");
     this->setSubButtonStYle();
@@ -29,9 +30,22 @@ MainMap::MainMap(QWidget *parent) :
     connect(timer, SIGNAL(timeout()), this, SLOT(setDateTime()));
     timer->start(1000);
 
+    focusTimer=new QTimer(this);
+    connect(focusTimer, SIGNAL(timeout()), this, SLOT(focusSlot()));
+    focusTimer->start(1000);
+
     ui->pushButtonStatic->setMenu(createStaticMenu());
     ui->pushSelPar->setMenu(createSelParMenu());
     ui->pushDisplayButton->setMenu(createDisplayMenu());
+    ui->pushButton_34->setMenu(createResetMenu());
+
+    ui->testEdit->setFocus();
+    word1=false;
+    word2=false;
+    word3=false;
+    wordSelection=false;
+    wordRef1=false;
+    wordRef2=false;
 }
 void MainMap::resizeEvent(QResizeEvent* event) {
     Q_UNUSED(event);
@@ -113,7 +127,7 @@ QMenu * MainMap::createSelParMenu()
     QAction* third=new QAction(trUtf8("По скорости"), this);
     QAction* fourth=new QAction(trUtf8("По высоте"), this);
     QAction* fifth=new QAction(trUtf8("Тренажные"), this);
-    QAction* sixth=new QAction(trUtf8("Рефльные"), this);
+    QAction* sixth=new QAction(trUtf8("Реальные"), this);
     QAction* seventh=new QAction(trUtf8("Головные"), this);
     QAction* eight=new QAction(trUtf8("Без этала"), this);
     QAction* ninth=new QAction(trUtf8("Опасн. близ"), this);
@@ -159,7 +173,105 @@ QMenu *MainMap::createDisplayMenu()
      return menu;
 }
 
-void MainMap::on_pushButton_34_clicked()
+QMenu *MainMap::createResetMenu()
+{
+    QMenu* menu=new QMenu(this);
+        QAction* first=new QAction(trUtf8("Звук"), this);
+        QAction* second=new QAction(trUtf8("Мерцание"), this);
+        QAction* third=new QAction(trUtf8("Подсказк"), this);
+        QAction* fourth=new QAction(trUtf8("Справок"), this);
+        QAction* sixth=new QAction(trUtf8("Статики"), this);
+        menu->addAction(first);
+        menu->addAction(second);
+        menu->addAction(third);
+        menu->addAction(fourth);
+        menu->addAction("Селекция",upointer,SLOT(selectionReset()));
+        menu->addAction(sixth);
+        return menu;
+
+}
+
+void MainMap::parseMyString(QString s)
+{
+    QTextStream Qcout(stdout);
+    QStringList list = s.split(" ");
+    for(auto &el:list){
+        if(el=="покажи"||el=="показать"||el=="Показать"||el=="Покажи"||el=="покажет"||el=="пока"||el=="Пока"){
+            word1=true;
+            wordRef1=true;
+            continue;
+        }
+        if(el=="же"&&word1){
+            continue;
+        }
+        if(el=="чужие"&&word1){
+            word2=true;
+            continue;
+        }
+        if(el=="самолеты"&&word2){
+                        upointer->showAirForeign();
+                        Qcout<<s<<"\n";
+                        ui->testEdit->clear();
+                        continue;
+        }
+        if(el=="воздушные"&&word2){
+            word3=true;
+            continue;
+        }
+        if(el=="объекты"&&word3){
+            upointer->showAirForeign();
+            Qcout<<s<<"\n";
+            ui->testEdit->clear();
+        }
+        word1=false;
+        word2=false;
+        word3=false;
+        if(el=="сброс"||el=="Сброс"){
+            wordSelection=true;
+            continue;
+        }
+        if(wordSelection && (el=="селекции"||el=="селекция")){
+            upointer->selectionReset();
+            Qcout<<s<<"\n";
+            ui->testEdit->clear();
+        }
+        if(el=="показать"||el=="Показать"){
+            wordRef1=true;
+            continue;
+        }
+        if(el=="полный" && wordRef1){
+            wordRef2=true;
+            continue;
+        }
+        if((el=="Формуляр" || el=="формуляр") && wordRef2){
+            upointer->drawRefefenceForm();
+            Qcout<<s<<"\n";
+            ui->testEdit->clear();
+        }
+        wordSelection=false;
+        wordRef1=false;
+        wordRef2=false;
+    }
+}
+
+void MainMap::on_pushButton_31_clicked()
 {
     upointer->drawRefefenceForm();
+}
+
+void MainMap::testSlot(QString s)
+{   QString str2=s;
+    //QTextStream Qcout(stdout);
+    //QStringList list = str2.split(" ");
+    //for(auto &el:list){
+      // if(el=="принял"||el=="ввод"||el=="Ввод"){
+    parseMyString(str2);
+         //   ui->testEdit->clear();
+       // }
+  //  }
+}
+
+void MainMap::focusSlot()
+{
+        ui->testEdit->setFocus();
 }

@@ -9,5 +9,21 @@
         <file>MyImage/KP_RTV.png</file>
         <file>MyImage/PU-ORLR.png</file>
         <file>MyImage/KP_RTB.png</file>
+        <file>MyImage/classVO/a.png</file>
+        <file>MyImage/classVO/aGreen.png</file>
+        <file>MyImage/classVO/aRed.png</file>
+        <file>MyImage/classVO/missle.png</file>
+        <file>MyImage/classVO/rGreen.png</file>
+        <file>MyImage/classVO/rRed.png</file>
+        <file>MyImage/classVO/s.png</file>
+        <file>MyImage/classVO/sGreen.png</file>
+        <file>MyImage/classVO/sRed.png</file>
+        <file>MyImage/classVO/v.png</file>
+        <file>MyImage/classVO/vGreen.png</file>
+        <file>MyImage/classVO/vRed.png</file>
+        <file>MyImage/classVO/aGray.png</file>
+        <file>MyImage/classVO/rGray.png</file>
+        <file>MyImage/classVO/sGray.png</file>
+        <file>MyImage/classVO/vGray.png</file>
     </qresource>
 </RCC>

@@ -166,7 +166,6 @@ int AirObject::getQuantity()
 
 void AirObject::inVisibility()
 {
-    visibility=!visibility;
     if(visibility)
         show();
     else
@@ -175,7 +174,7 @@ void AirObject::inVisibility()
 
 void AirObject::setVisibility(bool b)
 {
-    this->visibility=!b;
+    this->visibility=b;
     inVisibility();
 }
 
